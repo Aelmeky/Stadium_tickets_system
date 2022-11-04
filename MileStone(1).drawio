@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-11-04T21:14:43.459Z" agent="5.0 (Windows)" etag="gvlkFbSotx17RY8yXSJa" version="20.5.1" type="github">
+<mxfile host="app.diagrams.net" modified="2022-11-04T21:17:53.555Z" agent="5.0 (Windows)" etag="fOzQT-YMjxw2uH6v6vQ2" version="20.5.1" type="github">
   <diagram id="-QTC5YhXDy4I8rQjBGPy" name="Page-1">
-    <mxGraphModel dx="2966" dy="2780" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1221" dy="1833" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -75,7 +75,7 @@
         <mxCell id="gGllVryrbf8ipJSGgLWO-44" value="location" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="325" y="145" width="60" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="gGllVryrbf8ipJSGgLWO-45" value="Name" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+        <mxCell id="gGllVryrbf8ipJSGgLWO-45" value="name" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="345" y="30" width="55" height="20" as="geometry" />
         </mxCell>
         <mxCell id="gGllVryrbf8ipJSGgLWO-46" value="c_id" style="ellipse;whiteSpace=wrap;html=1;align=center;fontStyle=4;" parent="1" vertex="1">
@@ -108,7 +108,7 @@
         <mxCell id="gGllVryrbf8ipJSGgLWO-58" value="manager_id" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="1110" y="220" width="90" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="gGllVryrbf8ipJSGgLWO-60" value="Name" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
+        <mxCell id="gGllVryrbf8ipJSGgLWO-60" value="name" style="ellipse;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
           <mxGeometry x="960" y="295" width="60" height="20" as="geometry" />
         </mxCell>
         <mxCell id="gGllVryrbf8ipJSGgLWO-77" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startSize=0;endSize=0;sourcePerimeterSpacing=6;targetPerimeterSpacing=6;" parent="1" source="gGllVryrbf8ipJSGgLWO-66" target="gGllVryrbf8ipJSGgLWO-76" edge="1">
