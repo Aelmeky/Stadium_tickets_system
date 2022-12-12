@@ -210,3 +210,57 @@ INSERT INTO HostRequest VALUES('unhandled',
 
 
 
+--xxii) creating function upcomingMatchesOfClub
+CREATE FUNCTION upcomingMatchesOfClub
+(@clubName VARCHAR(20))
+RETURNS TABLE 
+AS
+RETURN 
+(
+SELECT c1.name, c2.name, m.startTime, s.name
+FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id)
+WHERE c1.name = @clubName AND c1.id <> c2.id AND m.startTime > CURRENT_TIMESTAMP
+)
+
+-- END (xxii)
+
+
+-- xxiii) creating function availableMatchesToAttend
+CREATE FUNCTION availableMatchesToAttend
+(@theDate DATETIME)
+RETURNS TABLE 
+AS 
+RETURN 
+(
+SELECT c1.name, c2.name, m.startTime, s.name
+FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Ticket t ON (t.m_id = m.id)
+WHERE (s.capacity - count(t.id) > 0) AND m.startTime >= @theDate AND c1.id <> c2.id
+)
+
+-- END (xxiii)
+
+
+-- xxiv) creating procedure purchaseTicket
+CREATE PROCEDURE purchaseTicket 
+(@natId VARCHAR(20), @hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
+AS
+INSERT INTO Ticket VALUES (1,
+@natId,
+(SELECT m.id 
+FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
+WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime)
+)
+
+-- END (xxiv)
+
+-- xxv) creating procedure updateMatchHost
+CREATE PROCEDURE updateMatchHost 
+(@hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
+AS
+UPDATE Match 
+SET c_id_1 = (SELECT id FROM Club WHERE name = gclubName) , c_id_2 = (SELECT id FROM Club WHERE name = hclubName)
+WHERE id = (SELECT m.id 
+FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
+WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime)
+
+-- END (xxv) 
