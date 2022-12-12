@@ -201,7 +201,7 @@ CREATE PROCEDURE addHostRequest
 @startTime DATETIME
 AS
 INSERT INTO HostRequest VALUES('unhandled',
-(SELECT m.id FROM Match m WHERE m.startTime=@startTime),
+(SELECT m.id FROM Match m WHERE m.startTime=@startTime AND m.s_id = (SELECT id FROM Stadium ss WHERE ss.name=@stadiumName)),
 (SELECT r.id FROM ClubRepresentative r INNER JOIN Club c ON c.id=r.c_id WHERE c.name = @clubName),
 (SELECT man.id FROM StadiumManager man INNER JOIN Stadium s ON s.id=man.s_id WHERE s.name = @stadiumName)
 )
