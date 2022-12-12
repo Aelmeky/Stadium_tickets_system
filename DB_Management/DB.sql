@@ -234,7 +234,7 @@ RETURN
 (
 SELECT c1.name, c2.name, m.startTime, s.name
 FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Ticket t ON (t.m_id = m.id)
-WHERE (s.capacity - count(t.id) > 0) AND m.startTime >= @theDate AND c1.id <> c2.id
+WHERE exists (SELECT id FROM Ticket WHERE status = 0 AND m_id = m.id) AND m.startTime >= @theDate AND c1.id <> c2.id
 )
 
 -- END (xxiii)
@@ -244,12 +244,18 @@ WHERE (s.capacity - count(t.id) > 0) AND m.startTime >= @theDate AND c1.id <> c2
 CREATE PROCEDURE purchaseTicket 
 (@natId VARCHAR(20), @hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
 AS
-INSERT INTO Ticket VALUES (0,
-@natId,
-(SELECT m.id 
+DECLARE @matchId int;
+SELECT @matchId = m.id 
 FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
-WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime)
-)
+WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime;
+DECLARE @ticketId int;
+SELECT TOP 1 @ticketId = id
+FROM Ticket 
+WHERE status = 0 AND @matchId = m_id
+UPDATE Ticket 
+SET f_id = @natId , status = 1
+WHERE id = @ticketId 
+
 
 -- END (xxiv)
 
