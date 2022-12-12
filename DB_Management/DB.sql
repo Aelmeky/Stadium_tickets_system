@@ -244,7 +244,7 @@ WHERE (s.capacity - count(t.id) > 0) AND m.startTime >= @theDate AND c1.id <> c2
 CREATE PROCEDURE purchaseTicket 
 (@natId VARCHAR(20), @hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
 AS
-INSERT INTO Ticket VALUES (1,
+INSERT INTO Ticket VALUES (0,
 @natId,
 (SELECT m.id 
 FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
@@ -273,3 +273,16 @@ SELECT c.name , count(m.id)
 FROM Club c INNER JOIN Match m ON (m.c_id_1 = c.id OR m.c_id_2 = c.id)
 WHERE m.startTime < CURRENT_TIMESTAMP
 GROUP BY (c.name)
+
+--END (xxvi)	
+
+-- xxvii) creating view clubsNeverMatched
+CREATE VIEW clubsNeverMatched 
+AS 
+SELECT c1.name, c2.name	
+FROM Club c1, Club c2
+WHERE NOT EXISTS (SELECT c1.name , c2.name 
+					FROM Club c1, Club c2, Match m 
+					WHERE m.c_id_1 = c1.id AND m.c_id_2 = c2.id )
+
+--	END (xxvii)
