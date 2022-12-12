@@ -2,6 +2,7 @@
 -- Requirements 2.1 for the Milestone :
 
 
+
 -- 1) Creates All the tables in our database
 CREATE PROCEDURE createAllTables
 AS
@@ -17,7 +18,7 @@ id INT PRIMARY KEY IDENTITY,
 name VARCHAR(20),
 location VARCHAR(20),
 )
-CREATE TABLE SystemManager(
+CREATE TABLE StadiumManager(
 id INT PRIMARY KEY IDENTITY,
 name VARCHAR(20),
 username VARCHAR(20),
@@ -73,7 +74,7 @@ match_id int,
 man_id int,
 rep_id int,
 CONSTRAINT FK_HOST_1 FOREIGN KEY (match_id) REFERENCES Match(id),
-CONSTRAINT FK_HOST_2 FOREIGN KEY (man_id) REFERENCES SystemManager(id),
+CONSTRAINT FK_HOST_2 FOREIGN KEY (man_id) REFERENCES StadiumManager(id),
 CONSTRAINT FK_HOST_3 FOREIGN KEY (rep_id) REFERENCES ClubRepresentative(id)
 )
 CREATE TABLE Ticket(
@@ -95,7 +96,7 @@ DROP TABLE SportAssociationManager
 DROP TABLE Ticket
 DROP TABLE Fan
 DROP TABLE HostRequest
-DROP TABLE SystemManager
+DROP TABLE StadiumManager
 DROP TABLE ClubRepresentative
 DROP TABLE Match
 DROP TABLE Club
@@ -112,7 +113,9 @@ AS
 DROP PROCEDURE dropAllTables
 DROP PROCEDURE createAllTables
 DROP PROCEDURE clearAllTables
-
+DROP PROCEDURE addRepresentative
+DROP PROCEDURE viewAvailableStadiumsOn
+DROP PROCEDURE addHostRequest
 -- END (3)
 -- EXECUTE dropAllProceduresFunctionsViews
 
@@ -123,7 +126,7 @@ CREATE PROCEDURE clearAllTables
 AS
 
 -- Drop the constraints first in order to be able to truncate tables 
-ALTER TABLE SystemManager DROP CONSTRAINT FK_MANAGER 
+ALTER TABLE StadiumManager DROP CONSTRAINT FK_MANAGER 
 ALTER TABLE ClubRepresentative DROP CONSTRAINT FK_REP
 ALTER TABLE Match DROP CONSTRAINT FK_MATCH_1
 ALTER TABLE Match DROP CONSTRAINT FK_MATCH_2
@@ -143,20 +146,67 @@ TRUNCATE TABLE Stadium
 TRUNCATE TABLE Match
 TRUNCATE TABLE Club
 TRUNCATE TABLE ClubRepresentative
-TRUNCATE TABLE SystemManager
+TRUNCATE TABLE StadiumManager
 TRUNCATE TABLE Fan
 
 -- Add the constraints again
-ALTER TABLE SystemManager ADD CONSTRAINT FK_MANAGER FOREIGN KEY (s_id) REFERENCES Stadium(id)
+ALTER TABLE StadiumManager ADD CONSTRAINT FK_MANAGER FOREIGN KEY (s_id) REFERENCES Stadium(id)
 ALTER TABLE ClubRepresentative ADD CONSTRAINT FK_REP FOREIGN KEY (c_id) REFERENCES Club(id)
 ALTER TABLE Match ADD CONSTRAINT  FK_MATCH_1 FOREIGN KEY (s_id) REFERENCES Stadium(id)
 ALTER TABLE Match ADD CONSTRAINT FK_MATCH_2 FOREIGN KEY (c_id_1) REFERENCES Club(id)
 ALTER TABLE Match ADD CONSTRAINT FK_MATCH_3 FOREIGN KEY (c_id_2) REFERENCES Club(id)
 ALTER TABLE HostRequest ADD CONSTRAINT FK_HOST_1 FOREIGN KEY (match_id) REFERENCES Match(id)
-ALTER TABLE HostRequest ADD CONSTRAINT FK_HOST_2 FOREIGN KEY (man_id) REFERENCES SystemManager(id)
+ALTER TABLE HostRequest ADD CONSTRAINT FK_HOST_2 FOREIGN KEY (man_id) REFERENCES StadiumManager(id)
 ALTER TABLE HostRequest ADD CONSTRAINT FK_HOST_3 FOREIGN KEY (rep_id) REFERENCES ClubRepresentative(id)
 ALTER TABLE Ticket ADD CONSTRAINT FK_TICKET_1 FOREIGN KEY (f_id) REFERENCES Fan(n_id)
 ALTER TABLE Ticket ADD CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Match(id)
 
 -- END (4)
 -- EXECUTE clearAllTables
+--                                                              End part 2.1 in the milestone
+
+-- Milestone Requirement 2.3 :
+
+-- xiii)
+-- Add a new club representative to the database
+CREATE PROCEDURE addRepresentative
+@name VARCHAR(20),
+@clubName VARCHAR(20),
+@userName VARCHAR(20),
+@password VARCHAR(20)
+AS
+INSERT INTO ClubRepresentative VALUES(@name,@userName ,@password,(SELECT id FROM Club c WHERE c.name = @clubName))
+
+-- End (xiii)
+--EXECUTE addRepresentative @name = 'Yehia', @clubName = 'Smoha', @userName='Yehia7169', @password='123456'
+
+
+-- xiv) Get the stadiums free on an input date
+CREATE PROCEDURE viewAvailableStadiumsOn
+@date DATETIME
+AS 
+SELECT s.name,s.location,s.capacity FROM Stadium s LEFT JOIN Match m ON s.id = m.s_id WHERE s.status=0 
+AND NOT EXISTS(
+SELECT * FROM Match m2 WHERE (@date BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
+OR (DATEADD(HH,2,@date) BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
+)
+
+-- END (xiv)
+--EXECUTE viewAvailableStadiumsOn @date = '2022-10-20 07:00:00'
+
+-- xv) add a new request to host the match
+CREATE PROCEDURE addHostRequest
+@clubName VARCHAR(20),
+@stadiumName VARCHAR(20),
+@startTime DATETIME
+AS
+INSERT INTO HostRequest VALUES('unhandled',
+(SELECT m.id FROM Match m WHERE m.startTime=@startTime),
+(SELECT r.id FROM ClubRepresentative r INNER JOIN Club c ON c.id=r.c_id WHERE c.name = @clubName),
+(SELECT man.id FROM StadiumManager man INNER JOIN Stadium s ON s.id=man.s_id WHERE s.name = @stadiumName)
+)
+
+-- END (xv)
+
+
+
