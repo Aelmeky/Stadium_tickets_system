@@ -264,3 +264,12 @@ FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c
 WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime)
 
 -- END (xxv) 
+
+--xxvi) creating view matchesPerTeam 
+
+CREATE VIEW matchesPerTeam
+AS
+SELECT c.name , count(m.id)
+FROM Club c INNER JOIN Match m ON (m.c_id_1 = c.id OR m.c_id_2 = c.id)
+WHERE m.startTime < CURRENT_TIMESTAMP
+GROUP BY (c.name)
