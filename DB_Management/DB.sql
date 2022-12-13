@@ -182,6 +182,123 @@ ALTER TABLE Ticket ADD CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Matc
 
 -- Milestone Requirement 2.3 :
 
+-- iii)
+
+CREATE VIEW clubsWithNoMatches AS
+SELECT Club.name
+FROM Club LEFT JOIN Match ON Club.id = Match.c_id_1 OR Club.id = Match.c_id_2
+WHERE Match.id IS NULL;
+
+-- End (iii)
+
+-- iv)
+
+CREATE PROCEDURE deleteMatch
+@host VARCHAR(20),
+@guest VARCHAR(20)
+AS
+DELETE FROM Match
+WHERE 
+Match.c_id_1 = (SELECT id FROM Club WHERE Club.name = @host) 
+AND
+Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest);
+
+-- End (iv)
+
+
+-- v)
+
+CREATE PROCEDURE deleteMatchesOnStadium
+@std_name VARCHAR(20)
+AS
+DELETE FROM Match
+WHERE 
+(Match.s_id = (SELECT id FROM Stadium WHERE Stadium.name = @std_name))
+AND
+Match.startTime > CURRENT_TIMESTAMP
+;
+
+
+-- End (v)
+
+-- vi)
+
+CREATE PROCEDURE addClub
+@club_name VARCHAR(20),
+@club_loc VARCHAR(20)
+AS
+INSERT INTO Club VALUES (@club_name,@club_loc);
+;
+
+-- End (vi)
+
+-- vii)
+
+CREATE PROCEDURE addTicket
+@host_club VARCHAR(20),
+@guest_club VARCHAR(20),
+@start DATETIME
+AS
+INSERT INTO Ticket(status,f_id,m_id)
+VALUES (1,NULL,
+(SELECT Match.id FROM Match,Club C1, Club C2
+WHERE Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id AND
+C1.name = @host_club AND C2.name = @guest_club AND
+Match.startTime = @start))
+;
+
+-- End (vii)
+
+
+-- viii)
+CREATE PROCEDURE deleteClub
+@club_name VARCHAR(20)
+AS
+DELETE FROM Club WHERE Club.name = @club_name
+;
+
+-- End(viii)
+
+
+-- ix)
+
+CREATE PROCEDURE addStadium
+@std_name VARCHAR(20),
+@std_loc VARCHAR(20),
+@cap INT
+AS
+INSERT INTO Stadium(name,status,location,capacity) VALUES (@std_name, 1, @std_loc, @cap);
+;
+
+-- End(ix)
+
+-- x)
+CREATE PROCEDURE deleteStadium
+@std_name VARCHAR(20)
+AS
+DELETE FROM Stadium WHERE Stadium.name = @std_name
+;
+-- End(x)
+
+
+-- xi)
+CREATE PROCEDURE blockFan
+@n_id VARCHAR(20)
+AS
+UPDATE Fan SET status = 0  WHERE Fan.n_id = @n_id
+;
+-- End(xi)
+
+
+-- xii)
+CREATE PROCEDURE unblockFan
+@n_id VARCHAR(20)
+AS
+UPDATE Fan SET status = 1  WHERE Fan.n_id = @n_id
+;
+-- End(xii)
+
+
 -- xiii)
 -- Add a new club representative to the database
 CREATE PROCEDURE addRepresentative
