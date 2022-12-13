@@ -56,6 +56,7 @@ name VARCHAR(20),
 username VARCHAR(20),
 password VARCHAR(20)
 )
+
 CREATE TABLE Match(
 id INT PRIMARY KEY IDENTITY,
 startTime DATETIME,
@@ -116,6 +117,13 @@ DROP PROCEDURE clearAllTables
 DROP PROCEDURE addRepresentative
 DROP PROCEDURE viewAvailableStadiumsOn
 DROP PROCEDURE addHostRequest
+DROP FUNCTION allUnassignedMatches
+DROP PROCEDURE addStadiumManager
+DROP FUNCTION allPendingRequests
+DROP PROCEDURE acceptRequest
+DROP PROCEDURE rejectRequest
+DROP PROCEDURE addFan
+DROP FUNCTION upcomingMatchesOfClub
 -- END (3)
 -- EXECUTE dropAllProceduresFunctionsViews
 
@@ -178,7 +186,7 @@ AS
 INSERT INTO ClubRepresentative VALUES(@name,@userName ,@password,(SELECT id FROM Club c WHERE c.name = @clubName))
 
 -- End (xiii)
---EXECUTE addRepresentative @name = 'Yehia', @clubName = 'Smoha', @userName='Yehia7169', @password='123456'
+
 
 
 -- xiv) Get the stadiums free on an input date
@@ -192,7 +200,7 @@ OR (DATEADD(HH,2,@date) BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
 )
 
 -- END (xiv)
---EXECUTE viewAvailableStadiumsOn @date = '2022-10-20 07:00:00'
+
 
 -- xv) add a new request to host the match
 CREATE PROCEDURE addHostRequest
@@ -201,12 +209,104 @@ CREATE PROCEDURE addHostRequest
 @startTime DATETIME
 AS
 INSERT INTO HostRequest VALUES('unhandled',
-(SELECT m.id FROM Match m WHERE m.startTime=@startTime AND m.s_id = (SELECT id FROM Stadium ss WHERE ss.name=@stadiumName)),
+(SELECT m.id FROM Match m WHERE m.startTime=@startTime AND m.c_id_1 = (SELECT c.id FROM Club c WHERE c.name = @clubName)),
 (SELECT r.id FROM ClubRepresentative r INNER JOIN Club c ON c.id=r.c_id WHERE c.name = @clubName),
 (SELECT man.id FROM StadiumManager man INNER JOIN Stadium s ON s.id=man.s_id WHERE s.name = @stadiumName)
 )
 
 -- END (xv)
+
+-- xvi) Returns info about the match hosted by the input club but not assigned to a stadium yet
+CREATE FUNCTION [allUnassignedMatches]
+(@clubName VARCHAR(20))
+RETURNS TABLE
+AS
+RETURN SELECT c2.name AS guestName,m.startTime FROM Club c1 INNER JOIN Match m 
+ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id 
+WHERE c1.name=@clubName AND m.s_id IS NULL
+
+-- END (xvi)
+
+-- xvii) Add a new stadium manager to the database
+CREATE PROCEDURE addStadiumManager
+@name VARCHAR(20),
+@stadiumName VARCHAR(20),
+@userName VARCHAR(20),
+@password VARCHAR(20)
+AS
+INSERT INTO StadiumManager VALUES(@name,@userName,@password,(SELECT s.id FROM Stadium s WHERE s.name=@stadiumName))
+
+-- END (xvii)
+
+
+-- xviii) Returns info about all unhandled requests for the input stadium manager
+CREATE FUNCTION [allPendingRequests]
+(@userName VARCHAR(20))
+RETURNS TABLE 
+AS
+RETURN SELECT rep.name AS representative, c2.name AS guestName, m.startTime FROM HostRequest h INNER JOIN StadiumManager s 
+ON h.man_id=s.id INNER JOIN Match m on h.match_id=m.id INNER JOIN ClubRepresentative rep ON m.c_id_1=rep.c_id 
+INNER JOIN Club c2 ON m.c_id_2=c2.id WHERE s.username=@userName AND h.status='unhandled'
+
+-- END (xviii)
+
+-- xix) Accept the request from club representative to host a match by setting the request status to be accepted and assign the stadium id to the match
+CREATE PROCEDURE acceptRequest
+@userName VARCHAR(20),
+@hostName VARCHAR(20),
+@guestName VARCHAR(20),
+@startTime DATETIME
+AS
+UPDATE HostRequest
+SET status='accepted'
+WHERE man_id = (SELECT s.id FROM StadiumManager s WHERE s.username=@userName) AND 
+match_id = (SELECT M.id FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
+WHERE c1.name=@hostName AND c2.name=@guestName AND m.startTime = @startTime)
+UPDATE Match
+SET s_id= (SELECT s.id FROM Stadium s INNER JOIN StadiumManager m ON m.s_id=s.id WHERE m.username=@userName)
+WHERE id = (SELECT M.id FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
+WHERE c1.name=@hostName AND c2.name=@guestName AND m.startTime = @startTime)
+
+-- END (xix)
+
+-- xx) reject the request from the club representative 
+CREATE PROCEDURE rejectRequest
+@userName VARCHAR(20),
+@hostName VARCHAR(20),
+@guestName VARCHAR(20),
+@startTime DATETIME
+AS
+UPDATE HostRequest
+SET status='rejected'
+WHERE man_id = (SELECT s.id FROM StadiumManager s WHERE s.username=@userName) AND 
+match_id = (SELECT M.id FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
+WHERE c1.name=@hostName AND c2.name=@guestName AND m.startTime = @startTime)
+
+-- END (xx)
+
+-- xxi) Add a new fan to the database
+CREATE PROCEDURE addFan
+@name VARCHAR(20),
+@userName VARCHAR(20),
+@password VARCHAR(20),
+@nationalID VARCHAR(20),
+@birthDate DATETIME,
+@address VARCHAR(20),
+@phoneNumber INT
+AS
+INSERT INTO Fan VALUES(@nationalID,@phoneNumber,@name,@address,0,@birthDate,@userName,@password)
+
+-- END (xxi)
+
+-- xxii) Get all coming matches for the input club 
+CREATE FUNCTION [upcomingMatchesOfClub]
+(@clubName VARCHAR(20))
+RETURNS TABLE
+AS
+RETURN SELECT c1.name AS host, c2.name AS guest, m.startTime, s.name FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
+INNER JOIN Stadium s ON m.s_id = s.id WHERE @clubName IN (c1.name, c2.name) AND (m.startTime > CURRENT_TIMESTAMP ) 
+
+-- END (xxii)
 
 
 
