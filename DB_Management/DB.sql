@@ -504,7 +504,7 @@ INNER JOIN Stadium s ON m.s_id = s.id WHERE @clubName IN (c1.name, c2.name) AND 
 
 
 -- xxiii) creating function availableMatchesToAttend
--- tested and correct 
+
 CREATE FUNCTION availableMatchesToAttend
 (@theDate DATETIME)
 RETURNS TABLE 
@@ -520,7 +520,7 @@ WHERE exists (SELECT id FROM Ticket WHERE status = 0 AND m_id = m.id) AND m.star
 
 
 -- xxiv) creating procedure purchaseTicket
--- tested and correct 
+
 CREATE PROCEDURE purchaseTicket 
 (@natId VARCHAR(20), @hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
 AS
@@ -546,7 +546,7 @@ IF (@fstatus = 1)
 -- END (xxiv)
 
 -- xxv) creating procedure updateMatchHost
--- tested correctly
+
 CREATE PROCEDURE updateMatchHost 
 (@hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
 AS
@@ -559,7 +559,7 @@ WHERE c1.name = @hclubName AND c2.name = @gclubName AND m.startTime = @startTime
 -- END (xxv) 
 
 --xxvi) creating view matchesPerTeam 
--- tested correct
+
 CREATE VIEW matchesPerTeam
 AS
 SELECT c.name , count(m.id) AS nummatches
@@ -570,7 +570,7 @@ GROUP BY (c.name)
 --END (xxvi)	
 
 -- xxvii) creating view clubsNeverMatched
--- tested correctly
+
 CREATE VIEW clubsNeverMatched 
 AS 
 SELECT c1.name AS host, c2.name	AS guest
@@ -580,23 +580,28 @@ except (SELECT c1.name , c2.name
 					FROM Club c1, Club c2, Match m 
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id) )
 
-
-
-
 --	END (xxvii)
 
 -- xxviii) creating function clubsNeverPlayed
--- tested and found an error
+
 CREATE FUNCTION clubsNeverPlayed
 (@clubName VARCHAR(20))
 RETURNS TABLE
 AS
 RETURN 
 SELECT c.name	
-FROM Club c INNER JOIN Match m ON m.c_id_1=c.id INNER JOIN Club c2 ON m.c_id_2=c2.id WHERE @clubName =c2.name
+FROM Club c
+WHERE c.name <> @clubName
+except(SELECT c.name	
+		FROM Club c, Club c1, Match m 
+		WHERE m.c_id_1 IN (c.id,c1.id) AND m.c_id_2 IN (c.id,c1.id) AND c1.name = @clubName )
+
+
+
+
 
 -- xxiv) creating function matchWithHighestAttendance
--- tested and working
+
 CREATE FUNCTION matchWithHighestAttendance
 ()
 RETURNS TABLE 
@@ -617,7 +622,7 @@ Having count (t.id) = (SELECT MAX(X)
 )
 
 -- xxx) creating function matchesRankedByAttendance
--- tested and correct 
+
 CREATE FUNCTION matchesRankedByAttendance 
 ()
 RETURNS TABLE 
@@ -637,12 +642,11 @@ group by c1.name , c2.name
 ) AS L1
 )
 
-drop function matchesRankedByAttendance
 
 
 
 -- xxvi) creating function requestsFromClub
--- tested and correct
+
 CREATE FUNCTION requestsFromClub
 (@stadName varchar(20), @clubName varchar(20))
 RETURNS TABLE 
@@ -651,9 +655,6 @@ RETURN
 SELECT c1.name AS host, c2.name AS guest
 FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id AND cr.id = c1.id) INNER JOIN Stadium s ON (s.id = m.s_id)
 WHERE s.name = @stadName AND c1.name = @clubName
-
-drop function requestsFromClub
-
 
 
 
@@ -699,5 +700,3 @@ exec createAllTables
 
 
 
-SELECT * from dbo.matchesRankedByAttendance()
-select * from dbo.requestsFromClub('yehiastadium','club4')	
