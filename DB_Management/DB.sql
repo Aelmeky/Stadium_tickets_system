@@ -124,6 +124,12 @@ DROP PROCEDURE acceptRequest
 DROP PROCEDURE rejectRequest
 DROP PROCEDURE addFan
 DROP FUNCTION upcomingMatchesOfClub
+DROP FUNCTION availableMatchesToAttend
+DROP PROCEDURE purchaseTicket
+DROP PROCEDURE updateMatchHost
+DROP VIEW matchesPerTeam
+DROP VIEW clubsNeverMatched
+DROP FUNCTION clubsNeverPlayed
 -- END (3)
 -- EXECUTE dropAllProceduresFunctionsViews
 
@@ -310,72 +316,68 @@ INNER JOIN Stadium s ON m.s_id = s.id WHERE @clubName IN (c1.name, c2.name) AND 
 
 
 
---xxii) creating function upcomingMatchesOfClub
-CREATE FUNCTION upcomingMatchesOfClub
-(@clubName VARCHAR(20))
-RETURNS TABLE 
-AS
-RETURN 
-(
-SELECT c1.name, c2.name, m.startTime, s.name
-FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id)
-WHERE c1.name = @clubName AND c1.id <> c2.id AND m.startTime > CURRENT_TIMESTAMP
-)
-
--- END (xxii)
 
 
 -- xxiii) creating function availableMatchesToAttend
+-- tested and correct 
 CREATE FUNCTION availableMatchesToAttend
 (@theDate DATETIME)
 RETURNS TABLE 
 AS 
 RETURN 
 (
-SELECT c1.name, c2.name, m.startTime, s.name
-FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Ticket t ON (t.m_id = m.id)
-WHERE exists (SELECT id FROM Ticket WHERE status = 0 AND m_id = m.id) AND m.startTime >= @theDate AND c1.id <> c2.id
+SELECT c1.name as host, c2.name as guest , m.startTime, s.name
+FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) 
+WHERE exists (SELECT id FROM Ticket WHERE status = 0 AND m_id = m.id) AND m.startTime >= @theDate 
 )
 
 -- END (xxiii)
 
 
 -- xxiv) creating procedure purchaseTicket
+-- tested and correct 
 CREATE PROCEDURE purchaseTicket 
 (@natId VARCHAR(20), @hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
 AS
-DECLARE @matchId int;
-SELECT @matchId = m.id 
-FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
-WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime;
-DECLARE @ticketId int;
-SELECT TOP 1 @ticketId = id
-FROM Ticket 
-WHERE status = 0 AND @matchId = m_id
-UPDATE Ticket 
-SET f_id = @natId , status = 1
-WHERE id = @ticketId 
-
+DECLARE @fstatus int;
+SELECT @fstatus = status 
+FROM Fan
+WHERE n_id = @natId
+IF (@fstatus = 1)
+	BEGIN
+	DECLARE @matchId int;
+	SELECT @matchId = m.id 
+	FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
+	WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime;
+	DECLARE @ticketId int;
+	SELECT TOP 1 @ticketId = id
+	FROM Ticket 
+	WHERE status = 0 AND @matchId = m_id
+	UPDATE Ticket 
+	SET f_id = @natId , status = 1
+	WHERE id = @ticketId 
+	END
 
 -- END (xxiv)
 
 -- xxv) creating procedure updateMatchHost
+-- tested correctly
 CREATE PROCEDURE updateMatchHost 
 (@hclubName VARCHAR(20), @gclubName VARCHAR(20), @startTime DATETIME)
 AS
 UPDATE Match 
-SET c_id_1 = (SELECT id FROM Club WHERE name = gclubName) , c_id_2 = (SELECT id FROM Club WHERE name = hclubName)
+SET c_id_1 = (SELECT id FROM Club WHERE name = @gclubName) , c_id_2 = (SELECT id FROM Club WHERE name = @hclubName)
 WHERE id = (SELECT m.id 
 FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
-WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime)
+WHERE c1.name = @hclubName AND c2.name = @gclubName AND m.startTime = @startTime)
 
 -- END (xxv) 
 
 --xxvi) creating view matchesPerTeam 
-
+-- tested correct
 CREATE VIEW matchesPerTeam
 AS
-SELECT c.name , count(m.id)
+SELECT c.name , count(m.id) AS nummatches
 FROM Club c INNER JOIN Match m ON (m.c_id_1 = c.id OR m.c_id_2 = c.id)
 WHERE m.startTime < CURRENT_TIMESTAMP
 GROUP BY (c.name)
@@ -383,12 +385,82 @@ GROUP BY (c.name)
 --END (xxvi)	
 
 -- xxvii) creating view clubsNeverMatched
+-- tested correctly
 CREATE VIEW clubsNeverMatched 
 AS 
-SELECT c1.name, c2.name	
+SELECT c1.name AS host, c2.name	AS guest
 FROM Club c1, Club c2
-WHERE NOT EXISTS (SELECT c1.name , c2.name 
+WHERE c1.id < c2.id
+except (SELECT c1.name , c2.name 
 					FROM Club c1, Club c2, Match m 
-					WHERE m.c_id_1 = c1.id AND m.c_id_2 = c2.id )
+					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id) )
+
+
+
 
 --	END (xxvii)
+
+-- xxviii) creating function clubsNeverPlayed
+-- tested and found an error
+CREATE FUNCTION clubsNeverPlayed
+(@clubName VARCHAR(20))
+RETURNS TABLE
+AS
+RETURN 
+SELECT c.name	
+FROM Club c INNER JOIN Match m ON m.c_id_1=c.id INNER JOIN Club c2 ON m.c_id_2=c2.id WHERE @clubName =c2.name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- to test 
+INSERT INTO Stadium values (1, 'Egypt', 20000, 'yehiastadium')
+INSERT INTO Club values ('ahly','Egypt')
+insert into Club values ('zamlek', 'Egypt')
+insert into Club values ('club3', 'Egypt')
+insert into Club values ('club4', 'Egypt')
+insert into StadiumManager values ('yehia', 'abdo', '123',1)
+insert into ClubRepresentative values ('meky', 'abdoq', '123', 1)
+insert into ClubRepresentative values ('omar', 'omar', '123', 3)
+insert into ClubRepresentative values ('hima', 'hima', '123', 2)
+insert into ClubRepresentative values ('malek', 'malek', '123', 4)
+insert into Fan values ('1234', '12', 'mosha8b', 'ad1', 1, '2002-1-2 01:10:59', 'user1', 'user')
+insert into Fan values ('123', '1', 'mosha8b1', 'ad2', 1, '2002-1-3 01:10:59', 'user2', 'user')
+insert into Fan values ('12', '14', 'mosha8b12', 'ad2', 0, '2002-1-3 01:10:59', 'user2', 'user')
+insert into SportAssociationManager values ('manager1', 'user1','user')
+insert into SystemAdmin values ('ana', 'admin', 'admin')
+insert into Match values ('2022-12-15 01:00:00', '2022-12-15 03:00:00', 1, 2,3)
+insert into Match values ('2021-12-15 01:00:00', '2021-12-15 03:00:00', 1, 1,3)
+insert into HostRequest values (1, 1, 1, 2)
+insert into HostRequest values (1, 2, 1, 3)
+insert into Ticket values (0,'1234', 2)
+insert into Ticket values (0,'123', 2)
+insert into Ticket values (0,'1234', 1)
+insert into Ticket values (0,'123', 1)
+exec createAllTables
+
+
