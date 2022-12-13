@@ -131,6 +131,9 @@ DROP VIEW matchesPerTeam
 DROP VIEW clubsNeverMatched
 DROP FUNCTION clubsNeverPlayed
 DROP FUNCTION matchWithHighestAttendance
+DROP FUNCTION matchesRankedByAttendance
+DROP FUNCTION requestsFromClub
+
 -- END (3)
 -- EXECUTE dropAllProceduresFunctionsViews
 
@@ -355,7 +358,7 @@ IF (@fstatus = 1)
 	FROM Ticket 
 	WHERE status = 0 AND @matchId = m_id
 	UPDATE Ticket 
-	SET f_id = @natId , status = 1
+	SET f_id = @natId , status = 0
 	WHERE id = @ticketId 
 	END
 
@@ -422,23 +425,53 @@ SELECT c1.name AS host, c2.name AS guest
 FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.id = m.c_id_2)
 WHERE m.id = (SELECT  m.id
 FROM Match m inner join Ticket t ON (t.m_id = m.id)
-WHERE t.status = 1
+WHERE t.status = 0
 group by (m.id)
 Having count (t.id) = (SELECT MAX(X)
 					FROM (SELECT count(t.id) as X
 							FROM Match m inner join Ticket t ON (t.m_id = m.id) 
-							WHERE t.status = 1
+							WHERE t.status = 0
 							) as C
 							)
 )
 
+-- xxx) creating function matchesRankedByAttendance
+-- tested and correct 
+CREATE FUNCTION matchesRankedByAttendance 
+()
+RETURNS TABLE 
+AS 
+RETURN 
+(
+SELECT host, guest 
+FROM (
+SELECT host, guest, rank() over (order by cou desc) as number
+FROM(
+SELECT c1.name AS host, c2.name AS guest, count(t.id) as cou
+FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.id = m.c_id_2) INNER JOIN Ticket t ON (t.m_id = m.id)
+WHERE t.status = 0 AND CURRENT_TIMESTAMP > m.endTime
+group by c1.name , c2.name
+) as l
+
+) AS L1
+)
+
+drop function matchesRankedByAttendance
 
 
 
+-- xxvi) creating function requestsFromClub
+-- tested and correct
+CREATE FUNCTION requestsFromClub
+(@stadName varchar(20), @clubName varchar(20))
+RETURNS TABLE 
+AS 
+RETURN 
+SELECT c1.name AS host, c2.name AS guest
+FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id AND cr.id = c1.id) INNER JOIN Stadium s ON (s.id = m.s_id)
+WHERE s.name = @stadName AND c1.name = @clubName
 
-
-
-
+drop function requestsFromClub
 
 
 
@@ -485,5 +518,5 @@ exec createAllTables
 
 
 
-
-		
+SELECT * from dbo.matchesRankedByAttendance()
+select * from dbo.requestsFromClub('yehiastadium','club4')	
