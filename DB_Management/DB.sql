@@ -182,8 +182,72 @@ ALTER TABLE Ticket ADD CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Matc
 -- END (4)
 -- EXECUTE clearAllTables
 --                                                              End part 2.1 in the milestone
+-- start of part 2.2 "Basic Data Retrieval"
+
+CREATE VIEW allAssocManagers AS
+SELECT username, password, name 
+FROM SportAssociationManager
+
+
+CREATE VIEW allClubRepresentatives AS 
+SELECT rep.username, rep.password, rep.name AS representative_name, c.name AS club_name
+FROM ClubRepresentative rep INNER JOIN Club c on rep.c_id = c.id
+
+
+CREATE VIEW allStadiumManagers AS
+SELECT manager.username, manager.password, manager.name AS manager_name, stad.name AS stadium_name
+FROM StadiumManager manager INNER JOIN Stadium stad on manager.s_id = stad.id
+
+
+CREATE VIEW allFans AS
+SELECT username, password, name, n_id AS national_id, status AS blocked, birthDate
+FROM Fan
+
+CREATE VIEW allMatches AS
+SELECT mat.startTime, c1.name AS host_club_name, c2.name AS guest_club_name
+FROM MATCH mat INNER JOIN Club c1 on mat.c_id_1 = c1.id INNER JOIN Club c2 on mat.c_id_2 = c2.id
+
+CREATE VIEW allTickets AS
+SELECT c1.name AS host_club_name,c2.name AS guest_club_name, mat.startTime AS start_time, stad.name AS stadium_name
+FROM Ticket tic INNER JOIN Match mat on tic.m_id = mat.id INNER JOIN Club c1 on mat.c_id_1 = c1.id 
+INNER JOIN Club c2 on mat.c_id_2 = c2.id INNER JOIN Stadium stad on mat.s_id = stad.id
+
+CREATE VIEW allCLubs AS 
+SELECT name, location 
+FROM Club
+
+CREATE VIEW allStadiums AS
+SELECT name, capacity, location, status AS available
+FROM Stadium
+
+CREATE VIEW allRequests AS
+SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, hostReq.status AS status
+FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id 
+INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id 
+
+
+-- end of part 2.2
 
 -- Milestone Requirement 2.3 :
+-- i)
+
+CREATE PROCEDURE addAssociationManager 
+@name varchar(20),@username varchar(20), @password varchar(20)
+AS
+INSERT INTO SportAssociationManager values(@name, @username, @password)
+GO
+
+-- ii)
+CREATE PROCEDURE addNewMatch 
+@host_club_name varchar(20), @guest_club_name varchar(20), @start_time datetime, @end_time datetime
+AS
+Declare @host_id int,@guest_id int 
+SELECT @host_id = c1.id, @guest_id = c2.id
+FROM Mathc mat INNER JOIN CLub c1 on mat.c_id_1 = c1.id INNER JOIN Club c2 on c2.id = mat.c_id_2 
+where c1.name = @host_club_name and c2.name = @guest_club_name
+INSERT INTO Match values (@start_time, @end_time, null, @host_id, @guest_id)
+GO
+
 
 -- iii)
 
