@@ -130,6 +130,7 @@ DROP PROCEDURE updateMatchHost
 DROP VIEW matchesPerTeam
 DROP VIEW clubsNeverMatched
 DROP FUNCTION clubsNeverPlayed
+DROP FUNCTION matchWithHighestAttendance
 -- END (3)
 -- EXECUTE dropAllProceduresFunctionsViews
 
@@ -410,7 +411,26 @@ RETURN
 SELECT c.name	
 FROM Club c INNER JOIN Match m ON m.c_id_1=c.id INNER JOIN Club c2 ON m.c_id_2=c2.id WHERE @clubName =c2.name
 
-
+-- xxiv) creating function matchWithHighestAttendance
+-- tested and working
+CREATE FUNCTION matchWithHighestAttendance
+()
+RETURNS TABLE 
+AS
+RETURN 									
+SELECT c1.name AS host, c2.name AS guest 
+FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.id = m.c_id_2)
+WHERE m.id = (SELECT  m.id
+FROM Match m inner join Ticket t ON (t.m_id = m.id)
+WHERE t.status = 1
+group by (m.id)
+Having count (t.id) = (SELECT MAX(X)
+					FROM (SELECT count(t.id) as X
+							FROM Match m inner join Ticket t ON (t.m_id = m.id) 
+							WHERE t.status = 1
+							) as C
+							)
+)
 
 
 
@@ -464,3 +484,6 @@ insert into Ticket values (0,'123', 1)
 exec createAllTables
 
 
+
+
+		
