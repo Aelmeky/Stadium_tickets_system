@@ -527,17 +527,17 @@ AS
 DECLARE @fstatus int;
 SELECT @fstatus = status 
 FROM Fan
-WHERE n_id = @natId
+WHERE n_id = @natId 
 IF (@fstatus = 1)
 	BEGIN
 	DECLARE @matchId int;
 	SELECT @matchId = m.id 
 	FROM Match m INNER JOIN Club c1 ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id)
-	WHERE c1.name = @hclubName AND c2.name = @gclubName AND c1.id <> c2.id AND m.startTime = @startTime;
+	WHERE c1.name = @hclubName AND c2.name = @gclubName AND m.startTime = @startTime;
 	DECLARE @ticketId int;
 	SELECT TOP 1 @ticketId = id
 	FROM Ticket 
-	WHERE status = 0 AND @matchId = m_id
+	WHERE status = 1 AND @matchId = m_id
 	UPDATE Ticket 
 	SET f_id = @natId , status = 0
 	WHERE id = @ticketId 
@@ -607,19 +607,20 @@ CREATE FUNCTION matchWithHighestAttendance
 RETURNS TABLE 
 AS
 RETURN 									
-SELECT c1.name AS host, c2.name AS guest 
-FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.id = m.c_id_2)
-WHERE m.id = (SELECT  m.id
-FROM Match m inner join Ticket t ON (t.m_id = m.id)
-WHERE t.status = 0
-group by (m.id)
-Having count (t.id) = (SELECT MAX(X)
-					FROM (SELECT count(t.id) as X
-							FROM Match m inner join Ticket t ON (t.m_id = m.id) 
-							WHERE t.status = 0
-							) as C
-							)
+(
+SELECT top 1 host, guest 
+FROM (
+SELECT host, guest, rank() over (order by cou asc) as number
+FROM(
+SELECT c1.name AS host, c2.name AS guest, count(t.id) as cou
+FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.id = m.c_id_2) INNER JOIN Ticket t ON (t.m_id = m.id)
+WHERE t.status = 0 AND CURRENT_TIMESTAMP > m.endTime
+group by c1.name , c2.name
+) as l
+
+) AS L1
 )
+
 
 -- xxx) creating function matchesRankedByAttendance
 
@@ -653,10 +654,8 @@ RETURNS TABLE
 AS 
 RETURN 
 SELECT c1.name AS host, c2.name AS guest
-FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id AND cr.id = c1.id) INNER JOIN Stadium s ON (s.id = m.s_id)
-WHERE s.name = @stadName AND c1.name = @clubName
-
-
+FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id  AND  cr.id = h.rep_id ) INNER JOIN Stadium s ON (s.id = m.s_id) 
+WHERE s.name = @stadName AND @clubName = c1.name 
 
 
 
@@ -675,7 +674,7 @@ WHERE s.name = @stadName AND c1.name = @clubName
 -- to test 
 INSERT INTO Stadium values (1, 'Egypt', 20000, 'yehiastadium')
 INSERT INTO Club values ('ahly','Egypt')
-insert into Club values ('zamlek', 'Egypt')
+insert into Club values ('zamalek', 'Egypt')
 insert into Club values ('club3', 'Egypt')
 insert into Club values ('club4', 'Egypt')
 insert into StadiumManager values ('yehia', 'abdo', '123',1)
@@ -690,13 +689,16 @@ insert into SportAssociationManager values ('manager1', 'user1','user')
 insert into SystemAdmin values ('ana', 'admin', 'admin')
 insert into Match values ('2022-12-15 01:00:00', '2022-12-15 03:00:00', 1, 2,3)
 insert into Match values ('2021-12-15 01:00:00', '2021-12-15 03:00:00', 1, 1,3)
+insert into Match values ('2023-12-15 01:00:00', '2023-12-15 03:00:00', 1, 1,4)
 insert into HostRequest values (1, 1, 1, 2)
 insert into HostRequest values (1, 2, 1, 3)
 insert into Ticket values (0,'1234', 2)
 insert into Ticket values (0,'123', 2)
 insert into Ticket values (0,'1234', 1)
 insert into Ticket values (0,'123', 1)
+insert into Ticket values (1, '12', 3)
 exec createAllTables
+
 
 
 
