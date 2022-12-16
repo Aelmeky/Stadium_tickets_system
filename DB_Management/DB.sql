@@ -653,12 +653,12 @@ CREATE FUNCTION requestsFromClub
 RETURNS TABLE 
 AS 
 RETURN 
-SELECT c1.name AS host, c2.name AS guest
-FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id  AND  cr.id = h.rep_id ) INNER JOIN Stadium s ON (s.id = m.s_id) 
-WHERE s.name = @stadName AND @clubName = c1.name 
+SELECT *
+FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id ) INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Club c3 ON (c3.id = cr.id)
+WHERE s.name = @stadName AND @clubName = c3.name  
 
 
-
+drop function requestsFromClub
 
 
 
@@ -672,32 +672,39 @@ WHERE s.name = @stadName AND @clubName = c1.name
 
 
 -- to test 
-INSERT INTO Stadium values (1, 'Egypt', 20000, 'yehiastadium')
-INSERT INTO Club values ('ahly','Egypt')
-insert into Club values ('zamalek', 'Egypt')
+select * from StadiumManager
+INSERT INTO Stadium values (1, 'Cairo', 20000, 'stadium1')
+INSERT INTO Stadium values (1, 'Alex', 30000, 'stadium2')
+INSERT INTO Stadium values (0, 'Suez', 30000, 'stadium3')
+INSERT INTO Club values ('club1','Egypt')
+insert into Club values ('club2', 'Egypt')
 insert into Club values ('club3', 'Egypt')
 insert into Club values ('club4', 'Egypt')
-insert into StadiumManager values ('yehia', 'abdo', '123',1)
-insert into ClubRepresentative values ('meky', 'abdoq', '123', 1)
-insert into ClubRepresentative values ('omar', 'omar', '123', 3)
-insert into ClubRepresentative values ('hima', 'hima', '123', 2)
-insert into ClubRepresentative values ('malek', 'malek', '123', 4)
-insert into Fan values ('1234', '12', 'mosha8b', 'ad1', 1, '2002-1-2 01:10:59', 'user1', 'user')
-insert into Fan values ('123', '1', 'mosha8b1', 'ad2', 1, '2002-1-3 01:10:59', 'user2', 'user')
-insert into Fan values ('12', '14', 'mosha8b12', 'ad2', 0, '2002-1-3 01:10:59', 'user2', 'user')
-insert into SportAssociationManager values ('manager1', 'user1','user')
-insert into SystemAdmin values ('ana', 'admin', 'admin')
+insert into StadiumManager values ('manager1', 'manager1username', '123',1)
+insert into StadiumManager values ('manager2', 'manager2username', '123',2)
+insert into StadiumManager values ('manager3', 'manager3username', '123',3)
+insert into ClubRepresentative values ('representative1', 'rep1username', '123', 1)
+insert into ClubRepresentative values ('representative2', 'rep2username', '123', 3)
+insert into ClubRepresentative values ('representative3', 'rep3username', '123', 2)
+insert into ClubRepresentative values ('representative4', 'rep4username', '123', 4)
+insert into Fan values ('1', 123, 'fan1', 'address1', 1, '2002-1-2 01:10:59', 'fan1username', '123')
+insert into Fan values ('2',456, 'fan2', 'address2', 1, '2002-1-3 01:10:59', 'fan2username', '123')
+insert into Fan values ('3', 789, 'fan3', 'address3', 0, '2002-1-3 01:10:59', 'fan3username', '123')
+insert into SportAssociationManager values ('manager1', 'managerusername','123')
+insert into SystemAdmin values ('adminName', 'adminUsername', '123')
 insert into Match values ('2022-12-15 01:00:00', '2022-12-15 03:00:00', 1, 2,3)
 insert into Match values ('2021-12-15 01:00:00', '2021-12-15 03:00:00', 1, 1,3)
 insert into Match values ('2023-12-15 01:00:00', '2023-12-15 03:00:00', 1, 1,4)
 insert into HostRequest values (1, 1, 1, 2)
 insert into HostRequest values (1, 2, 1, 3)
-insert into Ticket values (0,'1234', 2)
-insert into Ticket values (0,'123', 2)
-insert into Ticket values (0,'1234', 1)
-insert into Ticket values (0,'123', 1)
-insert into Ticket values (1, '12', 3)
-exec createAllTables
+insert into HostRequest values (1, 2, 1, 1)
+insert into Ticket values (1,'1', 2)
+insert into Ticket values (1,'2', 2)
+insert into Ticket values (0,'3', 1)
+insert into Ticket values (0,null, 1)
+
+
+
 
 
 
