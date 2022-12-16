@@ -393,7 +393,7 @@ OR (DATEADD(HH,2,@date) BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
 )
 
 -- END (xiv)
-
+ 
 
 -- xv) add a new request to host the match
 CREATE PROCEDURE addHostRequest
@@ -580,7 +580,7 @@ FROM Club c1, Club c2
 WHERE c1.id < c2.id
 except (SELECT c1.name , c2.name 
 					FROM Club c1, Club c2, Match m 
-					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id) )
+					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id) AND CURRENT_TIMESTAMP >= m.endTime )
 
 --	END (xxvii)
 
@@ -596,7 +596,7 @@ FROM Club c
 WHERE c.name <> @clubName
 except(SELECT c.name	
 		FROM Club c, Club c1, Match m 
-		WHERE m.c_id_1 IN (c.id,c1.id) AND m.c_id_2 IN (c.id,c1.id) AND c1.name = @clubName )
+		WHERE m.c_id_1 IN (c.id,c1.id) AND m.c_id_2 IN (c.id,c1.id) AND c1.name = @clubName AND CURRENT_TIMESTAMP >= m.endTime)
 
 
 
