@@ -381,9 +381,11 @@ INSERT INTO ClubRepresentative VALUES(@name,@userName ,@password,(SELECT id FROM
 
 
 -- xiv) Get the stadiums free on an input date
-CREATE PROCEDURE viewAvailableStadiumsOn
-@date DATETIME
+CREATE FUNCTION viewAvailableStadiumsOn
+(@date DATETIME)
+RETURNS TABLE
 AS 
+RETURN
 SELECT s.name,s.location,s.capacity FROM Stadium s LEFT JOIN Match m ON s.id = m.s_id WHERE s.status=0 
 AND NOT EXISTS(
 SELECT * FROM Match m2 WHERE (@date BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
