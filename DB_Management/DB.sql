@@ -513,7 +513,7 @@ RETURN
 (
 SELECT c1.name as host, c2.name as guest , m.startTime, s.name
 FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) 
-WHERE exists (SELECT id FROM Ticket WHERE status = 0 AND m_id = m.id) AND m.startTime >= @theDate 
+WHERE exists (SELECT id FROM Ticket WHERE status = 1 AND m_id = m.id) AND m.startTime >= @theDate 
 )
 
 -- END (xxiii)
@@ -608,9 +608,9 @@ RETURNS TABLE
 AS
 RETURN 									
 (
-SELECT top 1 host, guest 
+SELECT host, guest 
 FROM (
-SELECT host, guest, rank() over (order by cou asc) as number
+SELECT host, guest, dense_rank() over (order by cou desc) as number
 FROM(
 SELECT c1.name AS host, c2.name AS guest, count(t.id) as cou
 FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.id = m.c_id_2) INNER JOIN Ticket t ON (t.m_id = m.id)
@@ -619,8 +619,8 @@ group by c1.name , c2.name
 ) as l
 
 ) AS L1
+where number =1
 )
-
 
 -- xxx) creating function matchesRankedByAttendance
 
@@ -639,11 +639,8 @@ FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (c2.
 WHERE t.status = 0 AND CURRENT_TIMESTAMP > m.endTime
 group by c1.name , c2.name
 ) as l
-
 ) AS L1
 )
-
-
 
 
 -- xxvi) creating function requestsFromClub
@@ -653,16 +650,9 @@ CREATE FUNCTION requestsFromClub
 RETURNS TABLE 
 AS 
 RETURN 
-SELECT *
+SELECT c1.name as host ,c2.name as guest
 FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id ) INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Club c3 ON (c3.id = cr.id)
 WHERE s.name = @stadName AND @clubName = c3.name  
-
-
-drop function requestsFromClub
-
-
-
-
 
 
 
@@ -702,10 +692,3 @@ insert into Ticket values (1,'1', 2)
 insert into Ticket values (1,'2', 2)
 insert into Ticket values (0,'3', 1)
 insert into Ticket values (0,null, 1)
-
-
-
-
-
-
-
