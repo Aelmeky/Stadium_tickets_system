@@ -66,7 +66,7 @@ s_id INT,
 c_id_1 INT,
 c_id_2 INT,
 CONSTRAINT FK_MATCH_1 FOREIGN KEY (s_id) REFERENCES Stadium(id) ON DELETE SET NULL,
-CONSTRAINT FK_MATCH_2 FOREIGN KEY (c_id_1) REFERENCES Club(id),
+CONSTRAINT FK_MATCH_2 FOREIGN KEY (c_id_1) REFERENCES Club(id) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT FK_MATCH_3 FOREIGN KEY (c_id_2) REFERENCES Club(id)
 )
 CREATE TABLE HostRequest(
@@ -87,6 +87,7 @@ m_id INT,
 CONSTRAINT FK_TICKET_1 FOREIGN KEY (f_id) REFERENCES Fan(n_id),
 CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Match(id) ON DELETE CASCADE ON UPDATE CASCADE)
 GO
+
 
 -- END (1)
 
@@ -209,17 +210,20 @@ GO
 -- EXECUTE clearAllTables
 --                                                              End part 2.1 in the milestone
 -- start of part 2.2 "Basic Data Retrieval"
+
 GO
 CREATE VIEW allAssocManagers AS
 SELECT username, password, name 
 FROM SportAssociationManager
 GO
 
+
 GO
 CREATE VIEW allClubRepresentatives AS 
 SELECT rep.username, rep.password, rep.name AS representative_name, c.name AS club_name
 FROM ClubRepresentative rep INNER JOIN Club c on rep.c_id = c.id
 GO
+
 
 GO
 CREATE VIEW allStadiumManagers AS
@@ -250,6 +254,7 @@ INNER JOIN Club c2 on mat.c_id_2 = c2.id INNER JOIN Stadium stad on mat.s_id = s
 GO
 
 
+
 GO
 CREATE VIEW allCLubs AS 
 SELECT name, location 
@@ -270,6 +275,7 @@ FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id
 INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id 
 GO
 
+
 -- end of part 2.2
 
 -- Milestone Requirement 2.3 :
@@ -287,12 +293,9 @@ GO
 CREATE PROCEDURE addNewMatch 
 @host_club_name varchar(20), @guest_club_name varchar(20), @start_time datetime, @end_time datetime
 AS
-Declare @host_id int,@guest_id int 
-SELECT @host_id = c1.id, @guest_id = c2.id
-FROM Mathc mat INNER JOIN CLub c1 on mat.c_id_1 = c1.id INNER JOIN Club c2 on c2.id = mat.c_id_2 
-where c1.name = @host_club_name and c2.name = @guest_club_name
-INSERT INTO Match values (@start_time, @end_time, null, @host_id, @guest_id)
+INSERT INTO Match values (@start_time, @end_time, null,(SELECT c1.id FROM Club c1 WHERE c1.name=@host_club_name), (SELECT c2.id FROM Club c2 WHERE c2.name=@guest_club_name))
 GO
+
 
 
 -- iii)
@@ -442,7 +445,7 @@ CREATE FUNCTION viewAvailableStadiumsOn
 RETURNS TABLE
 AS 
 RETURN
-SELECT s.name,s.location,s.capacity FROM Stadium s LEFT JOIN Match m ON s.id = m.s_id WHERE s.status=0 
+SELECT s.name,s.location,s.capacity FROM Stadium s LEFT JOIN Match m ON s.id = m.s_id WHERE s.status=1 
 AND NOT EXISTS(
 SELECT * FROM Match m2 WHERE (@date BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
 OR (DATEADD(HH,2,@date) BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
@@ -719,6 +722,8 @@ INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative c
 INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Club c3 ON (c3.id = cr.id)
 WHERE s.name = @stadName AND @clubName = c3.name  
 GO
+
+
 
 
 
