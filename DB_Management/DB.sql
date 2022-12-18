@@ -25,7 +25,7 @@ name VARCHAR(20),
 username VARCHAR(20) UNIQUE,
 password VARCHAR(20),
 s_id INT,
-CONSTRAINT FK_MANAGER FOREIGN KEY (s_id) REFERENCES Stadium(id) ON DELETE CASCADE ON UPDATE CASCADE
+CONSTRAINT FK_MANAGER FOREIGN KEY (s_id) REFERENCES Stadium(id) ON DELETE set null--CASCADE ON UPDATE CASCADE
 )
 CREATE TABLE ClubRepresentative(
 id INT PRIMARY KEY IDENTITY,
@@ -33,7 +33,7 @@ name VARCHAR(20),
 username VARCHAR(20) UNIQUE,
 password VARCHAR(20),
 c_id INT,
-CONSTRAINT FK_REP FOREIGN KEY (c_id) REFERENCES Club(id) ON DELETE CASCADE ON UPDATE CASCADE
+CONSTRAINT FK_REP FOREIGN KEY (c_id) REFERENCES Club(id) ON DELETE set null --CASCADE ON UPDATE CASCADE
 )
 CREATE TABLE Fan(
 n_id VARCHAR(20) PRIMARY KEY,
@@ -334,7 +334,6 @@ AND
 Match.startTime > CURRENT_TIMESTAMP
 GO
 
-
 -- End (v)
 
 -- vi)
@@ -373,11 +372,13 @@ GO
 CREATE PROCEDURE deleteClub
 @club_name VARCHAR(20)
 AS
-DELETE FROM Club WHERE Club.name = @club_name
+DECLARE @club_id INT; 
+SELECT @club_id = id from Club where name = @club_name;
+DELETE FROM Match
+WHERE c_id_1 = @club_id or c_id_2 = @club_id;
+DELETE FROM Club WHERE Club.name = @club_name;
 GO
-
 -- End(viii)
-
 
 -- ix)
 GO
@@ -445,14 +446,14 @@ CREATE FUNCTION viewAvailableStadiumsOn
 RETURNS TABLE
 AS 
 RETURN
-SELECT s.name,s.location,s.capacity FROM Stadium s LEFT JOIN Match m ON s.id = m.s_id WHERE s.status=1 
+SELECT DISTINCT s.name,s.location,s.capacity FROM Stadium s LEFT JOIN Match m ON s.id = m.s_id WHERE s.status=1 
 AND NOT EXISTS(
 SELECT * FROM Match m2 WHERE (@date BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
-OR (DATEADD(HH,2,@date) BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
+OR (DATEADD(mi,90,@date) BETWEEN m2.startTime AND m2.endTime AND m2.s_id=s.id)
 )
 GO
 -- END (xiv)
- 
+
 
 -- xv) add a new request to host the match
 GO
@@ -722,43 +723,3 @@ INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative c
 INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Club c3 ON (c3.id = cr.id)
 WHERE s.name = @stadName AND @clubName = c3.name  
 GO
-
-
-
-
-
-
-
-
-
--- to test 
-select * from StadiumManager
-INSERT INTO Stadium values (1, 'Cairo', 20000, 'stadium1')
-INSERT INTO Stadium values (1, 'Alex', 30000, 'stadium2')
-INSERT INTO Stadium values (0, 'Suez', 30000, 'stadium3')
-INSERT INTO Club values ('club1','Egypt')
-insert into Club values ('club2', 'Egypt')
-insert into Club values ('club3', 'Egypt')
-insert into Club values ('club4', 'Egypt')
-insert into StadiumManager values ('manager1', 'manager1username', '123',1)
-insert into StadiumManager values ('manager2', 'manager2username', '123',2)
-insert into StadiumManager values ('manager3', 'manager3username', '123',3)
-insert into ClubRepresentative values ('representative1', 'rep1username', '123', 1)
-insert into ClubRepresentative values ('representative2', 'rep2username', '123', 3)
-insert into ClubRepresentative values ('representative3', 'rep3username', '123', 2)
-insert into ClubRepresentative values ('representative4', 'rep4username', '123', 4)
-insert into Fan values ('1', 123, 'fan1', 'address1', 1, '2002-1-2 01:10:59', 'fan1username', '123')
-insert into Fan values ('2',456, 'fan2', 'address2', 1, '2002-1-3 01:10:59', 'fan2username', '123')
-insert into Fan values ('3', 789, 'fan3', 'address3', 0, '2002-1-3 01:10:59', 'fan3username', '123')
-insert into SportAssociationManager values ('manager1', 'managerusername','123')
-insert into SystemAdmin values ('adminName', 'adminUsername', '123')
-insert into Match values ('2022-12-15 01:00:00', '2022-12-15 03:00:00', 1, 2,3)
-insert into Match values ('2021-12-15 01:00:00', '2021-12-15 03:00:00', 1, 1,3)
-insert into Match values ('2023-12-15 01:00:00', '2023-12-15 03:00:00', 1, 1,4)
-insert into HostRequest values ('accepted', 2, 1, 1)
-insert into HostRequest values (1, 2, 1, 3)
-insert into HostRequest values (1, 2, 1, 1)
-insert into Ticket values (1,'1', 2)
-insert into Ticket values (1,'2', 2)
-insert into Ticket values (0,'3', 1)
-insert into Ticket values (0,null, 1)
