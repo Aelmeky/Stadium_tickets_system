@@ -7,6 +7,9 @@ const sql = require('mssql');
 const moment = require('moment');
 const { StatusCodes } = require('http-status-codes');
 
+const app = express();
+
+
 const sqlConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PWD,
