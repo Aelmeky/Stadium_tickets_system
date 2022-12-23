@@ -49,13 +49,15 @@ const loginRoute = require("./routes/login");
 
 
 
-app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, "views"));
 
 app.set("view engine", "ejs"); // set up ejs for templating
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(".", "public", "images")));
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/',(req,res)=>{
+  res.render('viewHostRequest')
+})
 
 
 
