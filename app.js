@@ -1,4 +1,6 @@
-const express = require('express');
+
+
+      const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path')
 const logger = require('morgan');
@@ -7,13 +9,14 @@ const sql = require('mssql');
 const moment = require('moment');
 const { StatusCodes } = require('http-status-codes');
 
-const app = express();
 
+const app = express();
+require('dotenv').config();
 
 const sqlConfig = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PWD,
-    database: process.env.DB_NAME,
+    user: process.env.DB_USER_ADMIN,
+    password: process.env.DB_PWD_ADMIN,
+    database: 'test',
     server: 'localhost',
     pool: {
       max: 10,
@@ -26,6 +29,17 @@ const sqlConfig = {
     }
 
 }
+
+sql.connect(sqlConfig,function(err){
+  if(err) console.log(err.message)
+  else{
+    const request = new sql.Request()
+    request.query('select * from clubsNeverScheduled',(err,records)=>{
+      if(err) console.log(err.message);
+      else console.log(records);
+    })
+  }
+});
 
 const connect = async () => {
     try {
@@ -44,9 +58,9 @@ app.use(
   }),
 );
 
-const loginRoute = require("./routes/login");
+//const loginRoute = require("./routes/login");
 
-
+//const sportmanagerRoute = require("./routes/sportmanager");
 
 
 app.set("views", path.join(__dirname, "views"));
@@ -59,8 +73,11 @@ app.get('/',(req,res)=>{
   res.render('viewHostRequest')
 })
 
-
-
-app.listen(5000);
-
-
+//app.use('/',sportmanagerRoute)
+const port = 5000;
+app.listen(
+  port,
+  connect().then(() => {
+    console.log(`Server started on port ${port}`);
+  })
+);

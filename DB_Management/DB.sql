@@ -1,8 +1,7 @@
 
 -- Requirements 2.1 for the Milestone :
 
-
-
+create database test
 -- 1) Creates All the tables in our database
 GO
 CREATE PROCEDURE createAllTables
@@ -87,8 +86,8 @@ m_id INT,
 CONSTRAINT FK_TICKET_1 FOREIGN KEY (f_id) REFERENCES Fan(n_id),
 CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Match(id) ON DELETE CASCADE ON UPDATE CASCADE)
 GO
-
-
+drop table stadium
+exec createAllTables;
 -- END (1)
 
 
@@ -643,7 +642,7 @@ GO
 GO
 CREATE VIEW clubsNeverMatched 
 AS 
-SELECT c1.name AS , c2.name	AS guest
+SELECT c1.name AS host, c2.name	AS guest
 FROM Club c1, Club c2
 WHERE c1.id < c2.id
 except (SELECT c1.name , c2.name 
@@ -740,7 +739,7 @@ DELETE FROM Match
 WHERE 
 Match.c_id_1 = (SELECT id FROM Club WHERE Club.name = @host) 
 AND
-Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest);
+Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest)
 AND 
 Match.startTime = @start_time
 AND
@@ -775,3 +774,5 @@ except (SELECT c1.name , c2.name
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
 
 GO
+go 
+grant select on clubsNeverScheduled to admin

@@ -21,7 +21,7 @@ const deleteMatch = async(
     startTime,
     endTime
 ) => {
-    const request = new sql.request
+    const request = new sql.Request();
     request.input('host_club_name',sql.VarChar,hostClub);
     request.input('guest_club_name',sql.VarChar,guestClub);
     request.input('start_time',sql.DateTime,startTime);
@@ -30,19 +30,19 @@ const deleteMatch = async(
 }
 
 const upcomingMatches = async() => {
-    const request = new sql.request
+    const request = new sql.Request();
     return request.execute('upcomingMatches');
 }
 
 
 const alreadyPalyedMatches = async() => {
-    const request = new sql.request
+    const request = new sql.Request();
     return request.execute('alreadyPlayedMatches');
 }
 
 const clubsNeverScheduled = async() => {
-    const request = new sql.request
-    return request.execute('clubsNeverScheduled');
+    const request = new sql.Request();
+    return request.query('select * from clubsNeverScheduled');
 }
 
 module.exports = {
