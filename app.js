@@ -44,6 +44,8 @@ app.use(
   }),
 );
 
+const loginRoute = require("./routes/login");
+
 
 
 
@@ -54,6 +56,7 @@ app.set("view engine", "ejs"); // set up ejs for templating
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(".", "public", "images")));
+
 
 
 app.listen(5000);

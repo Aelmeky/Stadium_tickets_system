@@ -643,7 +643,7 @@ GO
 GO
 CREATE VIEW clubsNeverMatched 
 AS 
-SELECT c1.name AS host, c2.name	AS guest
+SELECT c1.name AS , c2.name	AS guest
 FROM Club c1, Club c2
 WHERE c1.id < c2.id
 except (SELECT c1.name , c2.name 
@@ -722,4 +722,56 @@ FROM Club c1 INNER JOIN Match m ON (c1.id = m.c_id_1) INNER JOIN Club c2 ON (m.c
 INNER JOIN HostRequest h ON (h.match_id = m.id ) INNER JOIN ClubRepresentative cr ON (h.rep_id = cr.id ) 
 INNER JOIN Stadium s ON (s.id = m.s_id) INNER JOIN Club c3 ON (c3.id = cr.id)
 WHERE s.name = @stadName AND @clubName = c3.name  
+GO
+
+--- end of milestone2 
+
+
+---- adding for milestone3
+
+GO
+CREATE PROCEDURE deleteMatchForSportManager
+@host VARCHAR(20),
+@guest VARCHAR(20),
+@start_time DATETIME,
+@end_time DATETIME
+AS
+DELETE FROM Match
+WHERE 
+Match.c_id_1 = (SELECT id FROM Club WHERE Club.name = @host) 
+AND
+Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest);
+AND 
+Match.startTime = @start_time
+AND
+Match.endTime = @end_time
+GO
+
+
+GO
+CREATE VIEW [upcomingMatches]
+AS
+SELECT c1.name AS host, c2.name AS guest, m.startTime, m.endTime
+FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
+WHERE (m.startTime > CURRENT_TIMESTAMP ) AND c1.id < c2.id
+GO
+
+GO
+CREATE VIEW [alreadyPalyedMatches]
+AS
+SELECT c1.name AS host, c2.name AS guest, m.startTime, m.endTime
+FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
+WHERE (m.startTime < CURRENT_TIMESTAMP ) AND c1.id < c2.id
+GO
+
+GO
+CREATE VIEW clubsNeverScheduled
+AS 
+SELECT c1.name AS host, c2.name	AS guest
+FROM Club c1, Club c2
+WHERE c1.id < c2.id
+except (SELECT c1.name , c2.name 
+					FROM Club c1, Club c2, Match m 
+					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
+
 GO
