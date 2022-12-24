@@ -1,7 +1,10 @@
 
 -- Requirements 2.1 for the Milestone :
+create database stadiumsystem
 
-
+alter login admin with password = 'admin'
+create user admin for login admin
+with default_schema = dbo
 
 -- 1) Creates All the tables in our database
 GO
@@ -281,7 +284,7 @@ GO
 -- Milestone Requirement 2.3 :
 -- i)
 
-GO
+GO 
 CREATE PROCEDURE addAssociationManager 
 @name varchar(20),@username varchar(20), @password varchar(20)
 AS
@@ -774,4 +777,38 @@ except (SELECT c1.name , c2.name
 					FROM Club c1, Club c2, Match m 
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
 
+GO
+
+
+-- helper method to get the type of the user
+
+GO
+CREATE PROCEDURE valid_login
+@username varchar(20),
+@password
+@type INT OUTPUT
+AS
+DECLARE @type INT;
+IF(EXISTS (
+	SELECT * 
+	FROM allAssocManagers assoc 
+	where assoc.username = @username and assoc.password = @password))
+	SET @type = 0;
+ELSE IF (EXISTS (
+	SELECT * 
+	FROM allClubRepresentatives rep 
+	where rep.username = @username and rep.password = @password))
+	SET @type = 1;
+ELSE IF (EXISTS (
+	SELECT * 
+	FROM allStadiumManagers mang 
+	where mang.username = @username and mang.password = @password))
+	SET @type = 2;
+ELSE IF (EXISTS (
+	SELECT * 
+	FROM allFans fan 
+	where fan.username = @username and fan.password = @password))
+	SET @type = 3;
+ELSE 
+	SET @type = 4; --invalid_login
 GO
