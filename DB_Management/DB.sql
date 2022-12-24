@@ -2,7 +2,11 @@
 -- Requirements 2.1 for the Milestone :
 
 
-
+CREATE DATABASE StadiumDatabase;
+USE StadiumDatabase;
+EXEC createAllTables;
+SELECT * FROM ClubRepresentative;
+INSERT INTO Club VALUES('ElAhly','Egypt');
 -- 1) Creates All the tables in our database
 GO
 CREATE PROCEDURE createAllTables
@@ -775,3 +779,15 @@ except (SELECT c1.name , c2.name
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
 
 GO
+
+CREATE PROC readRepresentativeClubInfo
+@rep_id int
+AS
+SELECT Club.id AS id, Club.name as name, Club.location as location FROM ClubRepresentative, Club WHERE ClubRepresentative.id = @rep_id AND ClubRepresentative.c_id = Club.id;
+
+
+
+EXEC readRepresentativeClubInfo 3;
+SELECT * FROM Club;
+SELECT * FROM ClubRepresentative;
+DROP PROC readRepresentativeClubInfo;
