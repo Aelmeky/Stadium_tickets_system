@@ -774,5 +774,7 @@ except (SELECT c1.name , c2.name
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
 
 GO
-go 
-grant select on clubsNeverScheduled to admin
+
+
+
+select * from Club
