@@ -19,7 +19,7 @@ namespace stadium_tickets_system
         }
         protected void deleteaMatch(object sender, EventArgs e)
         {
-
+            Response.Redirect("deletematch.aspx");
         }
 
         protected void allupcomingmatches(object sender, EventArgs e)

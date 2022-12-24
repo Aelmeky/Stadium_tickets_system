@@ -69,6 +69,8 @@
   <ItemGroup>
     <Content Include="addanewmatch.aspx" />
     <Content Include="alreadyplayed.aspx" />
+    <Content Include="deletematch.aspx" />
+    <Content Include="nevermatched.aspx" />
     <Content Include="SportManager.aspx" />
     <Content Include="upcomingmatches.aspx" />
     <Content Include="Web.config" />
@@ -87,6 +89,20 @@
     </Compile>
     <Compile Include="alreadyplayed.aspx.designer.cs">
       <DependentUpon>alreadyplayed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="deletematch.aspx.cs">
+      <DependentUpon>deletematch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="deletematch.aspx.designer.cs">
+      <DependentUpon>deletematch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="nevermatched.aspx.cs">
+      <DependentUpon>nevermatched.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="nevermatched.aspx.designer.cs">
+      <DependentUpon>nevermatched.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SportManager.aspx.cs">
