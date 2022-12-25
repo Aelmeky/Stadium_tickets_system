@@ -14,6 +14,19 @@ namespace stadium_tickets_system
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+
+
+            DataTable up = new DataTable();
+            conn.Open();
+            new SqlDataAdapter("select * from allCLubs", conn).Fill(up);
+            foreach (DataRow row in up.Rows)
+            {
+                DropDownListhost.Items.Add(new ListItem(row[0].ToString()));
+                DropDownListguest.Items.Add(new ListItem(row[0].ToString()));
+            }
+            conn.Close();
 
         }
 
@@ -22,25 +35,39 @@ namespace stadium_tickets_system
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-            String host = hostclub1.Text;
-            String guest = guestclub1.Text;
-            DateTime end = DateTime.Parse(endtime.Text);
-            DateTime start = DateTime.Parse(starttime.Text);
+            String host = DropDownListhost.SelectedValue;
+            String guest = DropDownListguest.SelectedValue;
+           DateTime end = DateTime.Parse(endtime.Text);
+           DateTime start = DateTime.Parse(starttime.Text);
+       
+            
 
-            Response.Write(start);
-
-            SqlCommand addnewmatch_proc = new SqlCommand("addNewMatch", conn);
-            addnewmatch_proc.CommandType = CommandType.StoredProcedure;
-            addnewmatch_proc.Parameters.Add(new SqlParameter("@host_club_name", host));
-            addnewmatch_proc.Parameters.Add(new SqlParameter("@guest_club_name", guest));
-            addnewmatch_proc.Parameters.Add(new SqlParameter("@start_time", start));
-            addnewmatch_proc.Parameters.Add(new SqlParameter("@end_time", end));
-
-            conn.Open();
-            addnewmatch_proc.ExecuteNonQuery();
-            conn.Close();
-
+            if (start < DateTime.Now)
+            {
+                Response.Write("cannot add this match as the date entered is in the past");
+            }else {
+                SqlCommand addnewmatch_proc = new SqlCommand("addNewMatch", conn);
+                addnewmatch_proc.CommandType = CommandType.StoredProcedure;
+                addnewmatch_proc.Parameters.Add(new SqlParameter("@host_club_name", host));
+                addnewmatch_proc.Parameters.Add(new SqlParameter("@guest_club_name", guest));
+                addnewmatch_proc.Parameters.Add(new SqlParameter("@start_time", start));
+                addnewmatch_proc.Parameters.Add(new SqlParameter("@end_time", end));
+                try
+                {
+                    conn.Open();
+                    addnewmatch_proc.ExecuteNonQuery();
+                    conn.Close();
+                }catch(Exception ex)
+                {
+                    Response.Write(ex.Message);
+                }
+                
+            }
         }
 
+        protected void DropDownListhost_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

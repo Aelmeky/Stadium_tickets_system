@@ -33,22 +33,22 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
-        /// hostclub1 control.
+        /// DropDownListhost control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox hostclub1;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListhost;
 
         /// <summary>
-        /// guestclub1 control.
+        /// DropDownListguest control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox guestclub1;
+        protected global::System.Web.UI.WebControls.DropDownList DropDownListguest;
 
         /// <summary>
         /// starttime control.

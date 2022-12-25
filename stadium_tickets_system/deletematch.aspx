@@ -9,14 +9,27 @@
 <body>
     <form id="form1" runat="server">
         <div>
-            delete the match you want</div>
+           <h1> delete the match you want </h1></div>
+        <div>
+            Host Club:
+             <asp:DropDownList ID="DropDownListhost1" runat="server">
+             </asp:DropDownList>
+        </div>
+       <div>
+           Guest Club:
+           <asp:DropDownList ID="DropDownguest1" runat="server">
+             </asp:DropDownList>
 
-        Host Club:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Guest Club:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Start time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; End time:<br />
-        <asp:TextBox ID="hostclub2" runat="server"></asp:TextBox>
-        <asp:TextBox ID="guestclub2" runat="server"></asp:TextBox>
-        <asp:TextBox ID="starttime1" runat="server"></asp:TextBox>
-        <asp:TextBox ID="endtime1" runat="server"></asp:TextBox>
-        <br />
+       </div>
+        <div>
+            Start time:
+                    <asp:TextBox ID="starttime1" runat="server"></asp:TextBox>
+        </div>
+        <div>
+            End time:
+              <asp:TextBox ID="endtime1" runat="server"></asp:TextBox>
+        </div>
+
         <asp:Button ID="deletema" runat="server" Text="delete" OnClick="deletema_Click" />
     </form>
 </body>

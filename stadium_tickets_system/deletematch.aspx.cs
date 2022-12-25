@@ -14,6 +14,19 @@ namespace stadium_tickets_system
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+            SqlConnection conn = new SqlConnection(connStr);
+
+
+            DataTable up = new DataTable();
+            conn.Open();
+            new SqlDataAdapter("select * from allCLubs", conn).Fill(up);
+            foreach (DataRow row in up.Rows)
+            {
+                DropDownListhost1.Items.Add(new ListItem(row[0].ToString()));
+                DropDownguest1.Items.Add(new ListItem(row[0].ToString()));
+            }
+            conn.Close();
 
         }
 
@@ -23,8 +36,8 @@ namespace stadium_tickets_system
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-            String host = hostclub2.Text;
-            String guest = guestclub2.Text;
+            String host = DropDownListhost1.SelectedValue;
+            String guest = DropDownguest1.SelectedValue;
             DateTime end = DateTime.Parse(endtime1.Text);
             DateTime start = DateTime.Parse(starttime1.Text);
 
@@ -35,10 +48,17 @@ namespace stadium_tickets_system
             addnewmatch_proc.Parameters.Add(new SqlParameter("@guest", guest));
             addnewmatch_proc.Parameters.Add(new SqlParameter("@start_time", start));
             addnewmatch_proc.Parameters.Add(new SqlParameter("@end_time", end));
-
-            conn.Open();
-            addnewmatch_proc.ExecuteNonQuery();
-            conn.Close();
+            try
+            {
+                conn.Open();
+                addnewmatch_proc.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch(Exception ex)
+            {
+                Response.Write(ex.Message);
+            }
+            
         }
     }
 }

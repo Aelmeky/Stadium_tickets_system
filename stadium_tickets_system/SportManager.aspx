@@ -8,13 +8,21 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <div>
+        <div >
+             <asp:Button ID="addnewmatch" runat="server" OnClick="addanewmatch" Text="add new match" />
         </div>
-        <asp:Button ID="addnewmatch" runat="server" OnClick="addanewmatch" Text="add new match" />
-        <asp:Button ID="deleteamatch" runat="server" Text="delete a match" OnClick="deleteaMatch" />
-        <asp:Button ID="upcomingmatches" runat="server" Text="view all upcoming matches" OnClick="allupcomingmatches"/>
-        <asp:Button ID="alreadypalyedmatches" runat="server" Text="view already palyed matches" OnClick="alreadyplayedmatches" />
-        <asp:Button ID="neverscheduled" runat="server" Text="view clubs never matched"  OnClick="nevermatched"/>
+       <div>
+           <asp:Button ID="deleteamatch" runat="server" Text="delete a match" OnClick="deleteaMatch" />
+       </div>
+        <div>
+            <asp:Button ID="upcomingmatches" runat="server" Text="view all upcoming matches" OnClick="allupcomingmatches"/>
+        </div>
+        <div>
+            <asp:Button ID="alreadypalyedmatches" runat="server" Text="view already palyed matches" OnClick="alreadyplayedmatches" />
+        </div>
+        <div>
+                    <asp:Button ID="neverscheduled" runat="server" Text="view clubs never matched"  OnClick="nevermatched"/>
+        </div>
     </form>
 </body>
 </html>

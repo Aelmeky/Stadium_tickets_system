@@ -1,0 +1,19 @@
+﻿a.card {
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    display: inline-block;
+    text-decoration: none;
+    font: bold 18px sans-serif;
+    background: #fd7c2a;
+    transition: background 2s; /* For modern browsers */
+    margin-top: 20px;
+    margin-left: 20px;
+    width:200px;
+  height:200px
+}
+
+a.card:hover {
+    background: #3cc16e;
+    }
+
