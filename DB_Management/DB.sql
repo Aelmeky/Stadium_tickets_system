@@ -6,7 +6,7 @@ CREATE DATABASE StadiumDatabase;
 USE StadiumDatabase;
 EXEC createAllTables;
 SELECT * FROM ClubRepresentative;
-INSERT INTO Club VALUES('ElAhly','Egypt');
+INSERT INTO Club VALUES('ABC','Egypt');
 -- 1) Creates All the tables in our database
 GO
 CREATE PROCEDURE createAllTables
@@ -787,7 +787,40 @@ SELECT Club.id AS id, Club.name as name, Club.location as location FROM ClubRepr
 
 
 
+CREATE PROC readUpcomingMatchesWithStadium
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime, Stadium.name AS StadiumName
+FROM ClubRepresentative, Club C1 , Club C2 ,Match, Stadium
+WHERE
+ClubRepresentative.id = @rep_id
+AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Stadium.id = Match.s_id
+AND Match.startTime>CURRENT_TIMESTAMP;
+
+CREATE PROC readUpcomingMatchesWithoutStadium
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime
+FROM ClubRepresentative, Club C1 , Club C2 ,Match
+WHERE
+ClubRepresentative.id = @rep_id
+AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Match.s_id IS NULL
+AND Match.startTime>CURRENT_TIMESTAMP;
+
+
+
 EXEC readRepresentativeClubInfo 3;
+EXEC readUpcomingMatchesWithStadium 3;
+EXEC readUpcomingMatchesWithoutStadium 3;
 SELECT * FROM Club;
 SELECT * FROM ClubRepresentative;
-DROP PROC readRepresentativeClubInfo;
+DROP PROC readUpcomingMatches;
+
+INSERT INTO Match VALUES ('2022-11-30 09:00','2022-11-30 11:00',NULL,1,3);
+
+INSERT INTO Stadium VALUES (1,'Egypt',1000,'myStd');
+SELECT * FROM Stadium;
