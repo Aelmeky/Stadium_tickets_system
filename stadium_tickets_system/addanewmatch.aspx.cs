@@ -17,7 +17,8 @@ namespace stadium_tickets_system
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-
+            DropDownListhost.Items.Clear();
+            DropDownListguest.Items.Clear();
             DataTable up = new DataTable();
             conn.Open();
             new SqlDataAdapter("select * from allCLubs", conn).Fill(up);
@@ -27,7 +28,7 @@ namespace stadium_tickets_system
                 DropDownListguest.Items.Add(new ListItem(row[0].ToString()));
             }
             conn.Close();
-
+           
         }
 
         protected void addingmatch_Click(object sender, EventArgs e)
@@ -41,10 +42,19 @@ namespace stadium_tickets_system
            DateTime start = DateTime.Parse(starttime.Value.Replace('T',' '));
             
 
-            if (start < DateTime.Now)
+            if (start < DateTime.Now || host == guest)
             {
-                Response.Write("cannot add this match as the date entered is in the past");
-            }else {
+                Response.Write("cannot add this match please check the data and try again later");
+                if(host == guest)
+                {
+                    Response.Write("host club and guest clubs cannot be the same try again!");
+                }
+                else
+                {
+                    Response.Write("date entered is incorrect add any date greater than the current date!");
+                }
+            }
+            else {
                 SqlCommand addnewmatch_proc = new SqlCommand("addNewMatch", conn);
                 addnewmatch_proc.CommandType = CommandType.StoredProcedure;
                 addnewmatch_proc.Parameters.Add(new SqlParameter("@host_club_name", host));
@@ -60,7 +70,7 @@ namespace stadium_tickets_system
                 {
                     Response.Write(ex.Message);
                 }
-                
+               
             }
         }
 

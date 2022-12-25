@@ -36,6 +36,18 @@
             background-size: cover;
             background-image: url(Helper/background.jpg);
             }
+                      .table{
+                 border-collapse: collapse;
+                 border: 1px solid black;
+                 padding: 8px;
+
+                 margin-left: auto;
+                 margin-right:auto;
+           }
+           .table th, td {
+	        border: 1px solid black;
+	            padding: 8px;
+                }
     </style>
 </head>
 <body>
@@ -48,7 +60,7 @@
             </div>
         <div>
             The Already Played Matches</div>
-        <asp:Table ID="playedmactes" runat="server">
+        <asp:Table ID="playedmactes" runat="server" CssClass="table">
              <asp:TableHeaderRow>
                 <asp:TableHeaderCell>host club</asp:TableHeaderCell>
                 <asp:TableHeaderCell>guest club</asp:TableHeaderCell>

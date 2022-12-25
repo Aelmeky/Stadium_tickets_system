@@ -17,6 +17,8 @@ namespace stadium_tickets_system
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
+            DropDownListhost1.Items.Clear();
+            DropDownguest1.Items.Clear();
 
             DataTable up = new DataTable();
             conn.Open();
