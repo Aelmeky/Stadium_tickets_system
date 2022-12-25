@@ -30,7 +30,7 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button addnewmatch;
+        protected global::System.Web.UI.WebControls.LinkButton addnewmatch;
 
         /// <summary>
         /// deleteamatch control.
@@ -39,7 +39,7 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button deleteamatch;
+        protected global::System.Web.UI.WebControls.LinkButton deleteamatch;
 
         /// <summary>
         /// upcomingmatches control.
@@ -48,7 +48,7 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button upcomingmatches;
+        protected global::System.Web.UI.WebControls.LinkButton upcomingmatches;
 
         /// <summary>
         /// alreadypalyedmatches control.
@@ -57,7 +57,7 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button alreadypalyedmatches;
+        protected global::System.Web.UI.WebControls.LinkButton alreadypalyedmatches;
 
         /// <summary>
         /// neverscheduled control.
@@ -66,6 +66,6 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button neverscheduled;
+        protected global::System.Web.UI.WebControls.LinkButton neverscheduled;
     }
 }

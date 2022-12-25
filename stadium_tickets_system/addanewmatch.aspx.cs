@@ -37,9 +37,8 @@ namespace stadium_tickets_system
 
             String host = DropDownListhost.SelectedValue;
             String guest = DropDownListguest.SelectedValue;
-           DateTime end = DateTime.Parse(endtime.Text);
-           DateTime start = DateTime.Parse(starttime.Text);
-       
+           DateTime end = DateTime.Parse(endtime.Value.Replace('T',' '));
+           DateTime start = DateTime.Parse(starttime.Value.Replace('T',' '));
             
 
             if (start < DateTime.Now)
@@ -65,9 +64,24 @@ namespace stadium_tickets_system
             }
         }
 
-        protected void DropDownListhost_SelectedIndexChanged(object sender, EventArgs e)
+        protected void deleteaMatch(object sender, EventArgs e)
         {
+            Response.Redirect("deletematch.aspx");
+        }
 
+        protected void allupcomingmatches(object sender, EventArgs e)
+        {
+            Response.Redirect("upcomingmatches.aspx");
+        }
+
+        protected void alreadyplayedmatches(object sender, EventArgs e)
+        {
+            Response.Redirect("alreadyplayed.aspx");
+        }
+
+        protected void nevermatched(object sender, EventArgs e)
+        {
+            Response.Redirect("nevermatched.aspx");
         }
     }
 }

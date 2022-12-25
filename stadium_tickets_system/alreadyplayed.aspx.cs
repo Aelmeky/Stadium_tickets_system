@@ -36,5 +36,24 @@ namespace stadium_tickets_system
             conn.Close();
 
         }
+        protected void addanewmatch(object sender, EventArgs e)
+        {
+            Response.Redirect("addanewmatch.aspx");
+        }
+        protected void deleteaMatch(object sender, EventArgs e)
+        {
+            Response.Redirect("deletematch.aspx");
+        }
+
+        protected void allupcomingmatches(object sender, EventArgs e)
+        {
+            Response.Redirect("upcomingmatches.aspx");
+        }
+
+
+        protected void nevermatched(object sender, EventArgs e)
+        {
+            Response.Redirect("nevermatched.aspx");
+        }
     }
 }

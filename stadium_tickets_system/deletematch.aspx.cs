@@ -38,8 +38,8 @@ namespace stadium_tickets_system
 
             String host = DropDownListhost1.SelectedValue;
             String guest = DropDownguest1.SelectedValue;
-            DateTime end = DateTime.Parse(endtime1.Text);
-            DateTime start = DateTime.Parse(starttime1.Text);
+            DateTime end = DateTime.Parse(endtime1.Value.Replace('T',' '));
+            DateTime start = DateTime.Parse(starttime1.Value.Replace('T',' '));
 
 
             SqlCommand addnewmatch_proc = new SqlCommand("deleteMatchForSportManager", conn);
@@ -58,7 +58,27 @@ namespace stadium_tickets_system
             {
                 Response.Write(ex.Message);
             }
-            
+          
+        }
+        protected void addanewmatch(object sender, EventArgs e)
+        {
+            Response.Redirect("addanewmatch.aspx");
+        }
+
+
+        protected void allupcomingmatches(object sender, EventArgs e)
+        {
+            Response.Redirect("upcomingmatches.aspx");
+        }
+
+        protected void alreadyplayedmatches(object sender, EventArgs e)
+        {
+            Response.Redirect("alreadyplayed.aspx");
+        }
+
+        protected void nevermatched(object sender, EventArgs e)
+        {
+            Response.Redirect("nevermatched.aspx");
         }
     }
 }

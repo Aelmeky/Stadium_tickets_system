@@ -24,6 +24,42 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+        /// addnewmatch control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton addnewmatch;
+
+        /// <summary>
+        /// upcomingmatches control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton upcomingmatches;
+
+        /// <summary>
+        /// alreadypalyedmatches control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton alreadypalyedmatches;
+
+        /// <summary>
+        /// neverscheduled control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton neverscheduled;
+
+        /// <summary>
         /// DropDownListhost1 control.
         /// </summary>
         /// <remarks>
@@ -48,7 +84,7 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox starttime1;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl starttime1;
 
         /// <summary>
         /// endtime1 control.
@@ -57,7 +93,7 @@ namespace stadium_tickets_system
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox endtime1;
+        protected global::System.Web.UI.HtmlControls.HtmlInputGenericControl endtime1;
 
         /// <summary>
         /// deletema control.
