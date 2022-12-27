@@ -824,3 +824,7 @@ INSERT INTO Match VALUES ('2022-11-30 09:00','2022-11-30 11:00',NULL,1,3);
 
 INSERT INTO Stadium VALUES (1,'Egypt',1000,'myStd');
 SELECT * FROM Stadium;
+
+SELECT * FROM dbo.viewAvailableStadiumsOn('2022-12-30 12:00');
+
+SELECT * FROM Match;
