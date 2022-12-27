@@ -752,9 +752,9 @@ CREATE VIEW [upcomingMatches]
 AS
 SELECT c1.name AS host, c2.name AS guest, m.startTime, m.endTime
 FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
-WHERE (m.startTime > CURRENT_TIMESTAMP ) AND c1.id < c2.id
+WHERE (m.startTime > CURRENT_TIMESTAMP ) AND c1.id <> c2.id
 GO
-
+drop view [upcomingMatches];
 GO
 CREATE VIEW [alreadyPalyedMatches]
 AS
@@ -776,5 +776,4 @@ except (SELECT c1.name , c2.name
 GO
 
 
-
-select * from Club
+select * from upcomingMatches

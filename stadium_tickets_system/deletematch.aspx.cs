@@ -17,8 +17,8 @@ namespace stadium_tickets_system
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-            DropDownListhost1.Items.Clear();
-            DropDownguest1.Items.Clear();
+            //DropDownListhost1.Items.Clear();
+           // DropDownguest1.Items.Clear();
 
             DataTable up = new DataTable();
             conn.Open();
@@ -43,7 +43,7 @@ namespace stadium_tickets_system
             DateTime end = DateTime.Parse(endtime1.Value.Replace('T',' '));
             DateTime start = DateTime.Parse(starttime1.Value.Replace('T',' '));
 
-
+            
             SqlCommand addnewmatch_proc = new SqlCommand("deleteMatchForSportManager", conn);
             addnewmatch_proc.CommandType = CommandType.StoredProcedure;
             addnewmatch_proc.Parameters.Add(new SqlParameter("@host", host));
@@ -60,7 +60,7 @@ namespace stadium_tickets_system
             {
                 Response.Write(ex.Message);
             }
-          
+            Response.Redirect("deletematch.aspx");
         }
         protected void addanewmatch(object sender, EventArgs e)
         {

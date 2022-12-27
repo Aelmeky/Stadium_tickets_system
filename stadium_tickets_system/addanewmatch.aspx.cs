@@ -17,8 +17,8 @@ namespace stadium_tickets_system
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
-            DropDownListhost.Items.Clear();
-            DropDownListguest.Items.Clear();
+            //DropDownListhost.Items.Clear();
+            //DropDownListguest.Items.Clear();
             DataTable up = new DataTable();
             conn.Open();
             new SqlDataAdapter("select * from allCLubs", conn).Fill(up);
@@ -40,12 +40,12 @@ namespace stadium_tickets_system
             String guest = DropDownListguest.SelectedValue;
            DateTime end = DateTime.Parse(endtime.Value.Replace('T',' '));
            DateTime start = DateTime.Parse(starttime.Value.Replace('T',' '));
-            
 
-            if (start < DateTime.Now || host == guest)
+
+            if (start < DateTime.Now || host.Equals(guest))
             {
-                Response.Write("cannot add this match please check the data and try again later");
-                if(host == guest)
+                Response.Write("cannot add this match please check the data and try again later ");
+                if(host.ToString().Equals(guest.ToString()))
                 {
                     Response.Write("host club and guest clubs cannot be the same try again!");
                 }
@@ -66,12 +66,15 @@ namespace stadium_tickets_system
                     conn.Open();
                     addnewmatch_proc.ExecuteNonQuery();
                     conn.Close();
-                }catch(Exception ex)
+                    Response.Redirect("addanewmatch.aspx");
+                }
+                catch(Exception ex)
                 {
                     Response.Write(ex.Message);
                 }
                
             }
+            
         }
 
         protected void deleteaMatch(object sender, EventArgs e)
