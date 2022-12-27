@@ -164,7 +164,6 @@ GO
 -- EXECUTE dropAllProceduresFunctionsViews
 
 
-
 -- 4) Clears all data in our tables
 GO
 CREATE PROCEDURE clearAllTables
@@ -254,7 +253,6 @@ INNER JOIN Club c2 on mat.c_id_2 = c2.id INNER JOIN Stadium stad on mat.s_id = s
 GO
 
 
-
 GO
 CREATE VIEW allCLubs AS 
 SELECT name, location 
@@ -270,10 +268,14 @@ GO
 
 GO
 CREATE VIEW allRequests AS
-SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, hostReq.status AS status
-FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id 
-INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id 
+SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, c1.name AS host, c2.name AS guest, m.startTime AS startTim,
+m.endTime AS endTime,hostReq.status AS status, hostReq.id AS requestID
+FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id
+INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id INNER JOIN Match m ON hostReq.match_id=m.id
+INNER JOIN Club c1 on m.c_id_1 = c1.id INNER JOIN Club c2 ON c2.id=m.c_id_2
 GO
+
+
 
 
 -- end of part 2.2
@@ -287,6 +289,7 @@ CREATE PROCEDURE addAssociationManager
 AS
 INSERT INTO SportAssociationManager values(@name, @username, @password)
 GO
+
 
 -- ii)
 GO
@@ -424,6 +427,8 @@ GO
 -- End(xii)
 
 
+
+
 -- xiii)
 -- Add a new club representative to the database
 GO
@@ -525,6 +530,7 @@ SET s_id= (SELECT s.id FROM Stadium s INNER JOIN StadiumManager m ON m.s_id=s.id
 WHERE id = (SELECT M.id FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
 WHERE c1.name=@hostName AND c2.name=@guestName AND m.startTime = @startTime)
 GO
+
 -- END (xix)
 
 -- xx) reject the request from the club representative 
@@ -643,7 +649,7 @@ GO
 GO
 CREATE VIEW clubsNeverMatched 
 AS 
-SELECT c1.name AS , c2.name	AS guest
+SELECT c1.name AS host , c2.name	AS guest
 FROM Club c1, Club c2
 WHERE c1.id < c2.id
 except (SELECT c1.name , c2.name 
@@ -740,7 +746,7 @@ DELETE FROM Match
 WHERE 
 Match.c_id_1 = (SELECT id FROM Club WHERE Club.name = @host) 
 AND
-Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest);
+Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest)
 AND 
 Match.startTime = @start_time
 AND
@@ -773,5 +779,11 @@ WHERE c1.id < c2.id
 except (SELECT c1.name , c2.name 
 					FROM Club c1, Club c2, Match m 
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
+GO
 
+GO
+CREATE PROCEDURE getStadium
+@managerUserName VARCHAR(20)
+AS
+SELECT s.name,s.status,s.location,s.capacity FROM Stadium s INNER JOIN StadiumManager sm ON sm.s_id=s.id WHERE sm.username=@managerUserName
 GO
