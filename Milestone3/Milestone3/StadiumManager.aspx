@@ -9,12 +9,8 @@
     <link href="Helper/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
         .text {
-            background-color: #93291b;
-            border: 1px solid #333333;
-            border-radius: 3px 3px 3px 3px;
-            box-shadow: 0 0 1px #93291b inset;
-            color: #f5f5f5;
-            padding: 0px;
+            color: saddlebrown;
+
         }
         #Image1{
             padding:10px;

@@ -5,3 +5,10 @@ C:\Users\yehia\source\repos\Milestone3\Milestone3\obj\Debug\Milestone3.csproj.As
 C:\Users\yehia\source\repos\Milestone3\Milestone3\obj\Debug\Milestone3.csproj.CoreCompileInputs.cache
 C:\Users\yehia\source\repos\Milestone3\Milestone3\obj\Debug\Milestone3.dll
 C:\Users\yehia\source\repos\Milestone3\Milestone3\obj\Debug\Milestone3.pdb
+D:\Stadium_tickets_system\Milestone3\Milestone3\bin\Milestone3.dll.config
+D:\Stadium_tickets_system\Milestone3\Milestone3\bin\Milestone3.dll
+D:\Stadium_tickets_system\Milestone3\Milestone3\bin\Milestone3.pdb
+D:\Stadium_tickets_system\Milestone3\Milestone3\obj\Debug\Milestone3.csproj.AssemblyReference.cache
+D:\Stadium_tickets_system\Milestone3\Milestone3\obj\Debug\Milestone3.csproj.CoreCompileInputs.cache
+D:\Stadium_tickets_system\Milestone3\Milestone3\obj\Debug\Milestone3.dll
+D:\Stadium_tickets_system\Milestone3\Milestone3\obj\Debug\Milestone3.pdb
