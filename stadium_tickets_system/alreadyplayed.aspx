@@ -6,11 +6,10 @@
 <head runat="server">
     <title></title>
        <style>
-        .topnav {
+           .topnav {
             background-color: #333;
             overflow: hidden;
         }
-
             .topnav a {
                 float: left;
                 color: #f2f2f2;
@@ -28,29 +27,58 @@
                padding:0;
                margin:0;
            }
+            .table {
+                  font-family: Arial, Helvetica, sans-serif;
+                  border-collapse: collapse;
+                  width: 100%;
+            }
+                .table td, .table th {
+                  border: 1px solid #ddd;
+                  padding: 8px;
+                }
+
+                .table tr:nth-child(even){background-color: darkgrey;}
+
+                .table tr:hover {background-color: dimgray;}
+
+                .table th {
+                  padding-top: 12px;
+                  padding-bottom: 12px;
+                  text-align: left;
+                  background-color: black;
+                  color: white;
+                }
            .container {
-            height:986px;
+            height:585px;
             width:100%;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
             background-image: url(Helper/background.jpg);
             }
-                      .table{
-                 border-collapse: collapse;
-                 border: 1px solid black;
-                 padding: 8px;
+            
+           .cont {
+          display: flex;
+           flex-direction: column;
+          align-items: center;
+          width: 50%;
+          position: relative;
+          margin: auto;
+           background-color: gainsboro;
+          opacity :0.8; 
+          
+        }
+              .label {
+      display: block;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 25px;
+    }
 
-                 margin-left: auto;
-                 margin-right:auto;
-           }
-           .table th, td {
-	        border: 1px solid black;
-	            padding: 8px;
-                }
-    </style>
+       </style>
 </head>
 <body>
+    <div class="container">
     <form id="form1" runat="server">
          <div class="topnav">
                      <asp:LinkButton ID="addnewmatch" runat="server" OnClick="addanewmatch" > add New Match</asp:LinkButton>
@@ -58,8 +86,9 @@
                      <asp:LinkButton ID="upcomingmatches" runat="server" Text="view all upcoming matches" OnClick="allupcomingmatches"/>
                      <asp:LinkButton ID="neverscheduled" runat="server" Text="view clubs never matched"  OnClick="nevermatched"/>
             </div>
+        <div class="cont">
         <div>
-            The Already Played Matches</div>
+            <asp:Label ID="Label1" runat="server" Text="Already Played Matches" CssClass="label"></asp:Label></div>
         <asp:Table ID="playedmactes" runat="server" CssClass="table">
              <asp:TableHeaderRow>
                 <asp:TableHeaderCell>host club</asp:TableHeaderCell>
@@ -68,6 +97,8 @@
                 <asp:TableHeaderCell>end time</asp:TableHeaderCell>
             </asp:TableHeaderRow>
         </asp:Table>
+            </div>
     </form>
+        </div>
 </body>
 </html>
