@@ -14,13 +14,13 @@ namespace Milestone3
     public partial class HostRequests : System.Web.UI.Page
     {
 
-        protected void handleRequest(String command,SqlConnection conn, String hostName, String guestName, DateTime startTime,String status)
+        protected void handleRequest(String command, SqlConnection conn, String hostName, String guestName, DateTime startTime, String status)
         {
             if (status == "unhandled")
             {
                 SqlCommand acceptReq = new SqlCommand(command, conn);
                 acceptReq.CommandType = System.Data.CommandType.StoredProcedure;
-                acceptReq.Parameters.Add(new SqlParameter("@userName", "jujuju"));
+                acceptReq.Parameters.Add(new SqlParameter("@userName", Session["userName"]));
                 acceptReq.Parameters.Add(new SqlParameter("@hostName", hostName));
                 acceptReq.Parameters.Add(new SqlParameter("@guestName", guestName));
                 acceptReq.Parameters.Add(new SqlParameter("@startTime", startTime));
@@ -74,24 +74,31 @@ namespace Milestone3
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
-            SqlConnection conn = new SqlConnection(connStr);
-            List<ArrayList> allHostRequests = getAllHostRequests(conn);
 
-            for (int i = 0; i < allHostRequests.Count; i++)
-            {
-
-                var item = allHostRequests.ElementAt(i);
-                String request = "From:" + item[0] + " Host:" + item[1] + " Guest:" + item[2] + " Status:" + item[3] + " StartTime:" + item[4] + " EndTime:" + item[5];
-                myRequests.Items.Add(request);
-
+            if (Session == null || Session["userName"] == null)
+            { 
+                Response.Redirect("login.aspx");
             }
-
-            foreach (ListItem item in myRequests.Items)
+            else
             {
-                item.Attributes.CssStyle.Add("padding", "20px");
-            }
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+                SqlConnection conn = new SqlConnection(connStr);
+                List<ArrayList> allHostRequests = getAllHostRequests(conn);
 
+                for (int i = 0; i < allHostRequests.Count; i++)
+                {
+
+                    var item = allHostRequests.ElementAt(i);
+                    String request = "From:" + item[0] + " Host:" + item[1] + " Guest:" + item[2] + " Status:" + item[3] + " StartTime:" + item[4] + " EndTime:" + item[5];
+                    myRequests.Items.Add(request);
+
+                }
+
+                foreach (ListItem item in myRequests.Items)
+                {
+                    item.Attributes.CssStyle.Add("padding", "20px");
+                }
+            }
         }
         protected void Accept_btn(object sender, EventArgs e)
         {
@@ -104,10 +111,10 @@ namespace Milestone3
                 String host = requests.ElementAt(idx)[1].ToString();
                 String guest = requests.ElementAt(idx)[2].ToString();
                 DateTime startTime = Convert.ToDateTime((requests.ElementAt(idx)[4]).ToString());
-                String status = requests.ElementAt(idx)[3].ToString();   
-                handleRequest("acceptRequest",conn, host, guest, startTime,status);
+                String status = requests.ElementAt(idx)[3].ToString();
+                handleRequest("acceptRequest", conn, host, guest, startTime, status);
             }
-          
+
             Response.Redirect("HostRequests.aspx");
 
         }
@@ -123,9 +130,9 @@ namespace Milestone3
                 String guest = requests.ElementAt(idx)[2].ToString();
                 DateTime startTime = Convert.ToDateTime((requests.ElementAt(idx)[4]).ToString());
                 String status = requests.ElementAt(idx)[3].ToString();
-                handleRequest("rejectRequest",conn, host, guest, startTime,status);
+                handleRequest("rejectRequest", conn, host, guest, startTime, status);
             }
-                Response.Redirect("HostRequests.aspx");
+            Response.Redirect("HostRequests.aspx");
         }
     }
 }

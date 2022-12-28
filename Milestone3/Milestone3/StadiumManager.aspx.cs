@@ -14,29 +14,35 @@ namespace Milestone3
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
-            SqlConnection conn = new SqlConnection(connStr);
-            SqlCommand getStadium = new SqlCommand("getStadium", conn);
-            getStadium.CommandType = System.Data.CommandType.StoredProcedure;
-            getStadium.Parameters.Add(new SqlParameter("@managerUserName", "jujuju"));
+            if (Session == null || Session["userName"] == null)
+            {
+                Response.Redirect("login.aspx");
+            }
+            else
+            {
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+                SqlConnection conn = new SqlConnection(connStr);
+                SqlCommand getStadium = new SqlCommand("getStadium", conn);
+                getStadium.CommandType = System.Data.CommandType.StoredProcedure;
+                getStadium.Parameters.Add(new SqlParameter("@managerUserName", Session["userName"]));
                 try
                 {
 
                     conn.Open();
                     SqlDataReader rdr = getStadium.ExecuteReader();
                     rdr.Read();
-                label1.Text = rdr["name"].ToString();
-                label2.Text = rdr["location"].ToString();
-                label3.Text = rdr["Capacity"].ToString();
-                if (rdr["status"].ToString() == "True") Label5.Text = "Available";
-                else Label5.Text = "Unavailable";
-                conn.Close();
+                    label1.Text = rdr["name"].ToString();
+                    label2.Text = rdr["location"].ToString();
+                    label3.Text = rdr["Capacity"].ToString();
+                    if (rdr["status"].ToString() == "True") Label5.Text = "Available";
+                    else Label5.Text = "Unavailable";
+                    conn.Close();
                 }
                 catch (Exception ex)
                 {
                     Response.Write(ex.Message);
                 }
-            
+            } 
         }
 
         protected void goStadiumInfo(object sender, EventArgs e)
