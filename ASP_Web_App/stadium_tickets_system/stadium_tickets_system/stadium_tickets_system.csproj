@@ -70,6 +70,7 @@
     <Content Include="AvailableStadiums.aspx" />
     <Content Include="ClubRepresentativeRegister.aspx" />
     <Content Include="RepresentativeClubInfo.aspx" />
+    <Content Include="RequestToHostMatch.aspx" />
     <Content Include="UpcomingMatches.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -95,6 +96,13 @@
     </Compile>
     <Compile Include="RepresentativeClubInfo.aspx.designer.cs">
       <DependentUpon>RepresentativeClubInfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RequestToHostMatch.aspx.cs">
+      <DependentUpon>RequestToHostMatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RequestToHostMatch.aspx.designer.cs">
+      <DependentUpon>RequestToHostMatch.aspx</DependentUpon>
     </Compile>
     <Compile Include="UpcomingMatches.aspx.cs">
       <DependentUpon>UpcomingMatches.aspx</DependentUpon>
