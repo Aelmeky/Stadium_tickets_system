@@ -14,25 +14,28 @@ namespace stadium_tickets_system
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session == null || Session["userName"] == null)
+                Response.Redirect("login.aspx");
         }
         protected void View(object sender, EventArgs e) {
-            DateTime st = DateTime.Parse(startTimeInput.Text);
+            try
+            {
+                DateTime st = DateTime.Parse(startTimeInput.Text);
 
 
-            
-            string startTime = st.ToString("yyyy-MM-dd HH:mm");
 
-            string connStr = WebConfigurationManager.ConnectionStrings["StadiumDatabaseConn"].ToString();
-            SqlConnection conn = new SqlConnection(connStr);
+                string startTime = st.ToString("yyyy-MM-dd HH:mm");
 
-            SqlCommand viewStad = new SqlCommand("SELECT * FROM dbo.viewAvailableStadiumsOn('" + startTime+"');", conn);
-            viewStad.CommandType = System.Data.CommandType.Text;
+                string connStr = WebConfigurationManager.ConnectionStrings["StadiumDatabaseConn"].ToString();
+                SqlConnection conn = new SqlConnection(connStr);
 
-            conn.Open();
-            SqlDataReader rdr = viewStad.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                SqlCommand viewStad = new SqlCommand("SELECT * FROM dbo.viewAvailableStadiumsOn('" + startTime + "');", conn);
+                viewStad.CommandType = System.Data.CommandType.Text;
 
-            
+                conn.Open();
+                SqlDataReader rdr = viewStad.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+
                 while (rdr.Read())
                 {
                     TableRow std = new TableRow();
@@ -52,15 +55,36 @@ namespace stadium_tickets_system
 
 
                     availableStadiumsTable.Rows.Add(std);
-                       
+
                 }
 
 
                 conn.Close();
+            }
+            catch {
+
+                Response.Redirect("AvailableStadiums.aspx");
+            }
 
 
 
 
+        }
+        protected void goClubInfo(object sender, EventArgs e)
+        {
+            Response.Redirect("RepresentativeClubInfo.aspx");
+        }
+        protected void goUpcomingMatches(object sender, EventArgs e)
+        {
+            Response.Redirect("UpcomingMatches.aspx");
+        }
+        protected void goAvailableStadiums(object sender, EventArgs e)
+        {
+            Response.Redirect("AvailableStadiums.aspx");
+        }
+        protected void goHostReq(object sender, EventArgs e)
+        {
+            Response.Redirect("RequestToHostMatch.aspx");
         }
     }
 }

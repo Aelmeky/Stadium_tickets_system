@@ -14,7 +14,9 @@ namespace stadium_tickets_system
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            String userid = "3";
+            if (Session == null || Session["userName"] == null)
+                Response.Redirect("login.aspx");
+            String userid = Session["userName"].ToString();
 
             string connStr = WebConfigurationManager.ConnectionStrings["StadiumDatabaseConn"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
@@ -27,25 +29,46 @@ namespace stadium_tickets_system
             SqlDataReader rdr = readClubInfoProc.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
 
             while (rdr.Read()) {
-                String clubid = rdr.GetInt32(rdr.GetOrdinal("id")).ToString();
-                String clubname = rdr.GetString(rdr.GetOrdinal("name"));
-                String clubloc = rdr.GetString(rdr.GetOrdinal("location"));
-                Label idlabel = new Label();
-                idlabel.Text = "Club Id: "+clubid+"<br>";
 
-                
-                Label namelabel = new Label();
-                namelabel.Text = "Club Name: " + clubname+"<br>";
-                Label loclabel = new Label();
-                loclabel.Text = "Location: " + clubloc;
+                TableRow info = new TableRow();
 
-                form1.Controls.Add(idlabel);
-                form1.Controls.Add(namelabel);
-                form1.Controls.Add(loclabel);
+                TableCell clubid = new TableCell();
+                info.Cells.Add(clubid);
+                clubid.Text = rdr.GetInt32(rdr.GetOrdinal("id")).ToString();
+
+                TableCell clubname = new TableCell();
+                info.Cells.Add(clubname);
+                clubname.Text = rdr.GetString(rdr.GetOrdinal("name"));
+
+
+
+                TableCell clubloc = new TableCell();
+                info.Cells.Add(clubloc);
+                clubloc.Text = rdr.GetString(rdr.GetOrdinal("location"));
+
+
+
+                infoTable.Rows.Add(info);
 
 
             }
             conn.Close();
+        }
+        protected void goClubInfo(object sender, EventArgs e)
+        {
+            Response.Redirect("RepresentativeClubInfo.aspx");
+        }
+        protected void goUpcomingMatches(object sender, EventArgs e)
+        {
+            Response.Redirect("UpcomingMatches.aspx");
+        }
+        protected void goAvailableStadiums(object sender, EventArgs e)
+        {
+            Response.Redirect("AvailableStadiums.aspx");
+        }
+        protected void goHostReq(object sender, EventArgs e)
+        {
+            Response.Redirect("RequestToHostMatch.aspx");
         }
     }
 }
