@@ -20,7 +20,7 @@ namespace Milestone3
             SqlDataReader rdrAssocManagers = allAssocManagers.ExecuteReader();
             while (rdrAssocManagers.Read())
             {
-                allUsernames.Add(rdrAssocManagers.GetString(rdrAssocManagers.GetOrdinal("club_representative_username")));
+                allUsernames.Add(rdrAssocManagers.GetString(rdrAssocManagers.GetOrdinal("username")));
             }
             conn.Close();
             return allUsernames;

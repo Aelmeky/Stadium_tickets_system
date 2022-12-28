@@ -237,7 +237,6 @@ SELECT username, password, name, n_id AS national_id, status AS blocked, birthDa
 FROM Fan
 GO
 
-
 GO
 CREATE VIEW allMatches AS
 SELECT mat.startTime, c1.name AS host_club_name, c2.name AS guest_club_name

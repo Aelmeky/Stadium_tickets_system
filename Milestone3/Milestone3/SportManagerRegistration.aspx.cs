@@ -93,7 +93,7 @@ namespace Milestone3
             addAssociationManager.Parameters.Add(new SqlParameter("@name", name));
             addAssociationManager.Parameters.Add(new SqlParameter("@username", username));
             addAssociationManager.Parameters.Add(new SqlParameter("@password", password));
-            bool uniqueUser = false;
+            bool uniqueUser = true;
             ArrayList allFans = getAllFans(conn);
             for (int i = 0; i < allFans.Count; i++)
             {
