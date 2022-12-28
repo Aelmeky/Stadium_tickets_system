@@ -15,6 +15,9 @@ namespace stadium_tickets_system
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session == null || Session["userName"] == null)
+                Response.Redirect("login.aspx");
+
 
             String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);

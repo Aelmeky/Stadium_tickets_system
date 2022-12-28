@@ -149,12 +149,12 @@
         </div>
         <div>
               <asp:Label ID="Label3" runat="server" Text="Start Time:" for ="starttime" CssClass ="label"></asp:Label>
-             <input id="starttime" type="datetime-local" runat="server" cssclass="datetime-input"/>
+             <input required ="true" id="starttime" type="datetime-local" runat="server" cssclass="datetime-input"/>
            
         </div>
         <div>
              <asp:Label ID="Label4" runat="server" Text="End Time:" for ="endtime" CssClass ="label"></asp:Label>
-             <input id="endtime" type="datetime-local" runat="server" cssclass="datetime-input"/>
+             <input required ="true" id="endtime" type="datetime-local" runat="server" cssclass="datetime-input"/>
         </div>
         
 

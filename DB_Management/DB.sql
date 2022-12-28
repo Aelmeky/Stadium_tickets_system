@@ -882,5 +882,13 @@ GO
          SET @blocked = 0; 
  GO
 
+ GO 
+ CREATE VIEW allRequests AS 
+ SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, c1.name AS host, c2.name AS guest, m.startTime AS startTim, 
+ m.endTime AS endTime,hostReq.status AS status, hostReq.id AS requestID 
+ FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id 
+ INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id INNER JOIN Match m ON hostReq.match_id=m.id 
+ INNER JOIN Club c1 on m.c_id_1 = c1.id INNER JOIN Club c2 ON c2.id=m.c_id_2 
+ GO
 
---select * from 
+select * from dbo.allRequests

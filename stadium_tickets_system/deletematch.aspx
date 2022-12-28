@@ -148,11 +148,11 @@
        </div>
         <div>
             <asp:Label ID="Label3" runat="server" Text="Start Time:" for ="starttime1" CssClass ="label"></asp:Label>
-                    <input id="starttime1" type="datetime-local" runat="server" cssclass="datetime-input" />
+                    <input required="true" id="starttime1" type="datetime-local" runat="server" cssclass="datetime-input" />
         </div>
         <div>
             <asp:Label ID="Label4" runat="server" Text="End Time:" for ="endtime1" CssClass ="label"></asp:Label>
-               <input id="endtime1" type="datetime-local" runat="server" cssclass="datetime-input" />
+               <input required ="true" id="endtime1" type="datetime-local" runat="server" cssclass="datetime-input" />
         </div>
 
         <asp:Button ID="deletema" runat="server" Text="Delete the match" OnClick="deletema_Click" cssclass="button"/>
