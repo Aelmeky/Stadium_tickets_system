@@ -165,6 +165,7 @@ namespace stadium_tickets_system
                         addRepresentative.ExecuteNonQuery();
                         conn.Close();
                         labelResult.Text = "";
+                        Response.Redirect("login.aspx");
                     }
                     catch (SqlException ex)
                     {

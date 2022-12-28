@@ -44,6 +44,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -70,6 +71,8 @@
     <Content Include="addanewmatch.aspx" />
     <Content Include="alreadyplayed.aspx" />
     <Content Include="clubRepresentativeRegistration.aspx" />
+    <Content Include="ControlClubs.aspx" />
+    <Content Include="ControlStadiums.aspx" />
     <Content Include="deletematch.aspx" />
     <Content Include="Helper\css\custom.css" />
     <Content Include="Helper\css\orionicons.css" />
@@ -258,9 +261,15 @@
     <Content Include="Helper\vendor\popper.js\umd\popper-utils.min.js" />
     <Content Include="Helper\vendor\popper.js\umd\popper.js" />
     <Content Include="Helper\vendor\popper.js\umd\popper.min.js" />
+    <Content Include="HostRequests.aspx" />
+    <Content Include="login.aspx" />
     <Content Include="nevermatched.aspx" />
+    <Content Include="register.aspx" />
     <Content Include="Registration.aspx" />
-    <Content Include="SportManager.aspx" />
+    <Content Include="SportManagerRegistration.aspx" />
+    <Content Include="StadiumManager.aspx" />
+    <Content Include="StadiumManagerRegisteration.aspx" />
+    <Content Include="SystemAdmin.aspx" />
     <Content Include="upcomingmatches.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -286,12 +295,39 @@
     <Compile Include="clubRepresentativeRegistration.aspx.designer.cs">
       <DependentUpon>clubRepresentativeRegistration.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ControlClubs.aspx.cs">
+      <DependentUpon>ControlClubs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlClubs.aspx.designer.cs">
+      <DependentUpon>ControlClubs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ControlStadiums.aspx.cs">
+      <DependentUpon>ControlStadiums.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlStadiums.aspx.designer.cs">
+      <DependentUpon>ControlStadiums.aspx</DependentUpon>
+    </Compile>
     <Compile Include="deletematch.aspx.cs">
       <DependentUpon>deletematch.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="deletematch.aspx.designer.cs">
       <DependentUpon>deletematch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HostRequests.aspx.cs">
+      <DependentUpon>HostRequests.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HostRequests.aspx.designer.cs">
+      <DependentUpon>HostRequests.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
     </Compile>
     <Compile Include="nevermatched.aspx.cs">
       <DependentUpon>nevermatched.aspx</DependentUpon>
@@ -301,6 +337,13 @@
       <DependentUpon>nevermatched.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="register.aspx.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="register.aspx.designer.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Registration.aspx.cs">
       <DependentUpon>Registration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -308,12 +351,33 @@
     <Compile Include="Registration.aspx.designer.cs">
       <DependentUpon>Registration.aspx</DependentUpon>
     </Compile>
-    <Compile Include="SportManager.aspx.cs">
-      <DependentUpon>SportManager.aspx</DependentUpon>
+    <Compile Include="SportManagerRegistration.aspx.cs">
+      <DependentUpon>SportManagerRegistration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="SportManager.aspx.designer.cs">
-      <DependentUpon>SportManager.aspx</DependentUpon>
+    <Compile Include="SportManagerRegistration.aspx.designer.cs">
+      <DependentUpon>SportManagerRegistration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StadiumManager.aspx.cs">
+      <DependentUpon>StadiumManager.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StadiumManager.aspx.designer.cs">
+      <DependentUpon>StadiumManager.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="StadiumManagerRegisteration.aspx.cs">
+      <DependentUpon>StadiumManagerRegisteration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StadiumManagerRegisteration.aspx.designer.cs">
+      <DependentUpon>StadiumManagerRegisteration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SystemAdmin.aspx.cs">
+      <DependentUpon>SystemAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SystemAdmin.aspx.designer.cs">
+      <DependentUpon>SystemAdmin.aspx</DependentUpon>
     </Compile>
     <Compile Include="upcomingmatches.aspx.cs">
       <DependentUpon>upcomingmatches.aspx</DependentUpon>

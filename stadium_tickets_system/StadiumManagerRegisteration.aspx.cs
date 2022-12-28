@@ -7,15 +7,15 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.Diagnostics;
 
 namespace stadium_tickets_system
 {
-    public partial class Registration : System.Web.UI.Page
+    public partial class StadiumManagerRegisteration : System.Web.UI.Page
     {
-        public ArrayList getAllAssocManagers(SqlConnection conn) {
+        public ArrayList getAllAssocManagers(SqlConnection conn)
+        {
             SqlCommand allAssocManagers = new SqlCommand("SELECT * FROM dbo.allAssocManagers", conn);
-            ArrayList allUsernames= new ArrayList();
+            ArrayList allUsernames = new ArrayList();
             conn.Open();
             SqlDataReader rdrAssocManagers = allAssocManagers.ExecuteReader();
             while (rdrAssocManagers.Read())
@@ -25,7 +25,8 @@ namespace stadium_tickets_system
             conn.Close();
             return allUsernames;
         }
-        public ArrayList getAllClubRepresentatives(SqlConnection conn) {
+        public ArrayList getAllClubRepresentatives(SqlConnection conn)
+        {
             SqlCommand allClubRepresentatives = new SqlCommand("SELECT * FROM dbo.allClubRepresentatives", conn);
             ArrayList allUsernames = new ArrayList();
             conn.Open();
@@ -37,7 +38,8 @@ namespace stadium_tickets_system
             conn.Close();
             return allUsernames;
         }
-        public ArrayList getAllStadiumManagers(SqlConnection conn) {
+        public ArrayList getAllStadiumManagers(SqlConnection conn)
+        {
             SqlCommand allStadiumManagers = new SqlCommand("SELECT * FROM dbo.allStadiumManagers", conn);
             ArrayList allUsernames = new ArrayList();
             conn.Open();
@@ -52,21 +54,21 @@ namespace stadium_tickets_system
         public ArrayList getAllFans(SqlConnection conn)
         {
             SqlCommand allFans = new SqlCommand("SELECT * FROM dbo.allFans", conn);
-           
-       
-          
+
+
+
             ArrayList allUsernames = new ArrayList();
             try
             {
                 conn.Open();
                 SqlDataReader rdrFans = allFans.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
-         
+
                 while (rdrFans.Read())
                 {
                     allUsernames.Add(rdrFans.GetString(rdrFans.GetOrdinal("userName")));
                 }
                 conn.Close();
-              
+
             }
             catch (Exception ex)
             {
@@ -74,17 +76,17 @@ namespace stadium_tickets_system
             }
             return allUsernames;
         }
-        protected ArrayList getAllNationalIDs(SqlConnection conn)
+        protected ArrayList getAllStadiums(SqlConnection conn)
         {
-            SqlCommand allStadiums = new SqlCommand("SELECT * FROM dbo.allFans", conn);
-            ArrayList nationaIDs = new ArrayList();
+            SqlCommand allStadiums = new SqlCommand("SELECT * FROM dbo.allStadiums", conn);
+            ArrayList clubs = new ArrayList();
             try
             {
                 conn.Open();
                 SqlDataReader rdr = allStadiums.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
                 while (rdr.Read())
                 {
-                    nationaIDs.Add(rdr.GetString(rdr.GetOrdinal("national_id")));
+                    clubs.Add(rdr.GetString(rdr.GetOrdinal("name")));
                 }
                 conn.Close();
             }
@@ -92,7 +94,7 @@ namespace stadium_tickets_system
             {
                 Response.Write(ex.Message);
             }
-            return nationaIDs;
+            return clubs;
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -101,35 +103,28 @@ namespace stadium_tickets_system
 
         protected void Register(object sender, EventArgs e)
         {
-          
             string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
-            String name = fanName.Text;
-            String username = fanUsername.Text;
+            String name = ManagerName.Text;
+            String stadiumName = StadiumName.Text;
+            String username = ManagerUserName.Text;
             String password = passValidate.Text;
-            String nationalID = nationalValidator.Text;
-            String birthDate = dateFan.Text;
-            String address = addressValidator.Text;
             bool found = false;
-            bool uniqueUser = true;
-            int phoneNumber = Int32.Parse(fanPhone.Text);
-            SqlCommand addFan = new SqlCommand("addFan", conn);
-            addFan.CommandType = System.Data.CommandType.StoredProcedure;
-            addFan.Parameters.Add(new SqlParameter("@name", name));
-            addFan.Parameters.Add(new SqlParameter("@userName", username));
-            addFan.Parameters.Add(new SqlParameter("@password", password));
-            addFan.Parameters.Add(new SqlParameter("@nationalID", nationalID));
-            addFan.Parameters.Add(new SqlParameter("@birthDate", birthDate));
-            addFan.Parameters.Add(new SqlParameter("@address", address));
-            addFan.Parameters.Add(new SqlParameter("@phoneNumber", phoneNumber));
-            ArrayList nationalIDs = getAllNationalIDs(conn);
-            for (int i = 0; i < nationalIDs.Count; i++)
+            SqlCommand addManager = new SqlCommand("addStadiumManager", conn);
+            addManager.CommandType = System.Data.CommandType.StoredProcedure;
+            addManager.Parameters.Add(new SqlParameter("@name", name));
+            addManager.Parameters.Add(new SqlParameter("@stadiumName", stadiumName));
+            addManager.Parameters.Add(new SqlParameter("@userName", username));
+            addManager.Parameters.Add(new SqlParameter("@password", password));
+            ArrayList stadiums = getAllStadiums(conn);
+            for (int i = 0; i < stadiums.Count; i++)
             {
-                if (nationalIDs[i].ToString() == nationalID)
+                if (stadiums[i].ToString() == stadiumName)
                 {
                     found = true;
                 }
             }
+            bool uniqueUser = true;
             ArrayList allFans = getAllFans(conn);
             for (int i = 0; i < allFans.Count; i++)
             {
@@ -162,32 +157,32 @@ namespace stadium_tickets_system
                     uniqueUser = false;
                 }
             }
-            if (!found)
+
+            if (found)
             {
                 if (uniqueUser)
                 {
                     try
                     {
-                        conn.Close();
                         conn.Open();
-                        addFan.ExecuteNonQuery();
+                        addManager.ExecuteNonQuery();
                         conn.Close();
                         labelResult.Text = "";
-                        Response.Redirect("login.aspx");
+                        Response.Redirect("login.aspx"); 
                     }
-                    catch (SqlException ex)
+                    catch (Exception ex)
                     {
-                        labelResult.Text = "Date is not in the form mm/dd/yyyy";
+                        labelResult.Text = "Error occured, Please try again later";
                     }
                 }
                 else
                 {
-                    labelResult.Text = "Username is already taken";
+                    labelResult.Text = "Username already registered, Please select another username";
                 }
-                }
+            }
             else
             {
-                labelResult.Text = "This National ID already exists !";
+                labelResult.Text = "This Stadium Does not exist !";
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="clubRepresentativeRegistration.aspx.cs" Inherits="stadium_tickets_system.clubRepresentativeRegistration" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SportManagerRegistration.aspx.cs" Inherits="stadium_tickets_system.SportManagerRegistration" %>
 
 <!DOCTYPE html>
 
@@ -70,35 +70,32 @@
             
 
                         <div class ="form-group mb-4">
-                            <asp:TextBox required= "true" MaxLength="20" ID="RepresentativeName" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="Name" runat="server" ></asp:TextBox>
+                            <asp:TextBox required= "true" MaxLength="20" ID="AssociationName" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="Name" runat="server" ></asp:TextBox>
 
                         </div>
                           <div class ="form-group mb-4">
-                            <asp:TextBox required= "true" MaxLength="20" ID="RepresentativeUsername" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="User Name" runat="server" ></asp:TextBox>
+                            <asp:TextBox required= "true" MaxLength="20" ID="AssociationUserName" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="User Name" runat="server" ></asp:TextBox>
 
                         </div>
                       
                              <div class ="form-group mb-4">
-                            <asp:TextBox required= "true" MaxLength="20" TextMode="Password" ID="passValidate" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="Password" runat="server" ></asp:TextBox>                           
+                            <asp:TextBox required= "true" MaxLength="20" TextMode="Password" ID="passValidate" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="Password" runat="server" ></asp:TextBox>
+                            
                                </div>
-                      
-                            <div class ="form-group mb-4">
-                            <asp:TextBox required= "true" ID="ClubName" CssClass="form-control border-0 shadow form-control-lg text-base" placeholder="Club Name" runat="server" ></asp:TextBox>
 
-                        </div>
-                           
                         <div style="color:red; font-weight:bold;">
                             <asp:Label runat="server" ID="labelResult"></asp:Label>
                         </div>
+                                                
             
                        
-                        <asp:Button Text="Sign up" CssClass="btn btn-primary" Height="50px" Width="400px" runat="server" OnClick="Register"/>
+                        <asp:Button Text="Sign up" CssClass="btn btn-primary" Height="50px" Width="400px" runat="server" OnClick="Regiser_Sport_Manager" />
                     </div>
                 </div>
                
                 <footer class="footer bg-white shadow align-self-end py-3 px-xl-5 w-100 " style="text-align:end;margin-top:390px">
                     <div class="container-fluid">
-                         <div class="row">   
+                        <div class="row">   
                             <div class="col-md-6 text-center text-md-left text-primary">
                                 <p class  ="mb-2 mb-md-0">CopyRights &copy;2022</p>
                             </div>
