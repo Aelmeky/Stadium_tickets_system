@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="HostRequests.aspx.cs" Inherits="Milestone3.HostRequests" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="SystemAdmin.aspx.cs" Inherits="Milestone3.SystemAdmin" %>
+
 
 <!DOCTYPE html>
 
@@ -80,7 +81,7 @@
             background-color: green;
             color: white;
             padding: 5px;
-            margin: 5px;
+            margin: 200px 5px 50px 5px;
             border-radius: 50%
         }
 
@@ -118,21 +119,19 @@
         <img class="preloader" src="Helper/loading-img.gif" alt="">
     </div>
 
-    <form id="form1" runat="server">
+    <form id="form_system_admin" runat="server">
+        <div class="topnav">
+            <asp:LinkButton ID="LinkButton1" runat="server" OnClick="goFan">Fans</asp:LinkButton>
+            <asp:LinkButton ID="LinkButton2" runat="server" OnClick="goClub">Clubs</asp:LinkButton>
+            <asp:LinkButton ID="LinkButton3" runat="server" OnClick="goStadium">Stadiums</asp:LinkButton>
+        </div>
         <center>
-            <div class="topnav">
-                <asp:LinkButton ID="LinkButton1" runat="server" OnClick="goStadiumInfo">View Stadium Info</asp:LinkButton>
-                <asp:LinkButton ID="LinkButton2" runat="server" OnClick="goHostRequests">View Host Requests</asp:LinkButton>
-            </div>
             <div>
-                <asp:Button ID="Button1" runat="server" CssClass="accbtn" Text="Accept" OnClick="Accept_btn" />
-                <asp:Button ID="Button2" runat="server" CssClass="rjtbtn" Text="Reject" OnClick="Reject_btn" />
-            </div>
-            <div>
-                <asp:Label ID="message" runat="server" Text="Note that: You can only edit unhandled requests" CssClass="message"></asp:Label>
-            </div>
-            <div>
-                <asp:ListBox ID="myRequests" runat="server" Height="500px" CssClass="text"></asp:ListBox>
+                <asp:Button ID="button_blockfan" runat="server" Text="Block Fan" OnClick="method_block_fan" CssClass="rjtbtn" />
+                <asp:Button ID="button_unblockfan" runat="server" Text="Unblock Fan" OnClick="method_unblock_fan" CssClass="accbtn" />
+                <br />
+                <asp:TextBox ID="text_fan_id" runat="server" placeholder="Enter a fan national id" Width="400px" Height="100px"></asp:TextBox>
+                <br />
             </div>
         </center>
     </form>

@@ -173,6 +173,7 @@ namespace Milestone3
                         addFan.ExecuteNonQuery();
                         conn.Close();
                         labelResult.Text = "";
+                        Response.Redirect("login.aspx");
                     }
                     catch (SqlException ex)
                     {

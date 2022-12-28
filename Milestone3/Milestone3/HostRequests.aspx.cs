@@ -62,7 +62,7 @@ namespace Milestone3
                 String stadiumManager = rdrHostRequests.GetString(rdrHostRequests.GetOrdinal("stadium_manager_username"));
                 ArrayList hostReq = new ArrayList();
 
-                if (stadiumManager == "jujuju")
+                if (stadiumManager == Session["userName"].ToString())
                 {
                     hostReq.Add(clubRep); hostReq.Add(host); hostReq.Add(guest); hostReq.Add(status); hostReq.Add(startTime); hostReq.Add(endTime);
                     hostRequests.Add(hostReq);
@@ -93,6 +93,8 @@ namespace Milestone3
                     myRequests.Items.Add(request);
 
                 }
+                if(myRequests.Items.Count==0) myRequests.Visible=false;
+                else myRequests.Visible=true;
 
                 foreach (ListItem item in myRequests.Items)
                 {

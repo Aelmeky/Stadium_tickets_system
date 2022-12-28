@@ -165,6 +165,7 @@ namespace Milestone3
                         addRepresentative.ExecuteNonQuery();
                         conn.Close();
                         labelResult.Text = "";
+                        Response.Redirect("login.aspx");
                     }
                     catch (SqlException ex)
                     {

@@ -124,7 +124,7 @@ namespace Milestone3
                     found = true;
                 }
             }
-            bool uniqueUser = false;
+            bool uniqueUser = true;
             ArrayList allFans = getAllFans(conn);
             for (int i = 0; i < allFans.Count; i++)
             {
@@ -168,6 +168,7 @@ namespace Milestone3
                         addManager.ExecuteNonQuery();
                         conn.Close();
                         labelResult.Text = "";
+                        Response.Redirect("login.aspx"); 
                     }
                     catch (Exception ex)
                     {

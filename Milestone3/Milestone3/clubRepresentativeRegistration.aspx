@@ -7,8 +7,54 @@
     <title></title>
      <link href="Helper/css/style.default.css" rel="stylesheet" />
     <link href="Helper/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+           html,body{
+            height:100%;
+            margin:0;
+        }
+         .backgnd {
+            
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-image: url(Helper/background.jpg);
+        }
+          .preloader {
+            position: absolute;
+            margin: 0 auto;
+            left: 1%;
+            right: 1%;
+            top: 25%;
+            width: 320px;
+            background: center center no-repeat none;
+            background-size: auto auto;
+            background-size: 95px 95px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            border-radius: 50%;
+        }
+
+        #preloader {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: #fff;
+            z-index: 11000;
+            position: fixed;
+            display: block
+        }
+    </style>
 </head>
-<body>
+<body class="backgnd">
+       <div id="preloader">
+        <img class="preloader" src="Helper/loading-img.gif" alt="">
+    </div>
    <form id="form1" runat="server">
         <div class=" page-holder d-flex align-items-center">
             <div class="container">
@@ -67,6 +113,8 @@
             
         </div>
     </form>
+       <script src="Helper/js/all.js"></script>
+    <script src="Helper/js/custom.js"></script>
 </body>
 </html>
 

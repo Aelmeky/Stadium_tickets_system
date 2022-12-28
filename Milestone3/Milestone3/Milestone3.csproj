@@ -54,6 +54,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="clubRepresentativeRegistration.aspx" />
+    <Content Include="ControlClubs.aspx" />
+    <Content Include="ControlStadiums.aspx" />
     <Content Include="Helper\background.jpg" />
     <Content Include="Helper\css\customstylesheet.css" />
     <Content Include="Helper\fonts\orion-font.eot" />
@@ -262,10 +264,13 @@
     <Content Include="Helper\vendor\popper.js\umd\popper.js" />
     <Content Include="Helper\vendor\popper.js\umd\popper.min.js" />
     <Content Include="HostRequests.aspx" />
+    <Content Include="login.aspx" />
+    <Content Include="register.aspx" />
     <Content Include="Registration.aspx" />
     <Content Include="SportManagerRegistration.aspx" />
     <Content Include="StadiumManager.aspx" />
     <Content Include="StadiumManagerRegisteration.aspx" />
+    <Content Include="SystemAdmin.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +281,20 @@
     <Compile Include="clubRepresentativeRegistration.aspx.designer.cs">
       <DependentUpon>clubRepresentativeRegistration.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ControlClubs.aspx.cs">
+      <DependentUpon>ControlClubs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlClubs.aspx.designer.cs">
+      <DependentUpon>ControlClubs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ControlStadiums.aspx.cs">
+      <DependentUpon>ControlStadiums.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ControlStadiums.aspx.designer.cs">
+      <DependentUpon>ControlStadiums.aspx</DependentUpon>
+    </Compile>
     <Compile Include="HostRequests.aspx.cs">
       <DependentUpon>HostRequests.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -283,7 +302,20 @@
     <Compile Include="HostRequests.aspx.designer.cs">
       <DependentUpon>HostRequests.aspx</DependentUpon>
     </Compile>
+    <Compile Include="login.aspx.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="login.aspx.designer.cs">
+      <DependentUpon>login.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="register.aspx.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="register.aspx.designer.cs">
+      <DependentUpon>register.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Registration.aspx.cs">
       <DependentUpon>Registration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -311,6 +343,13 @@
     </Compile>
     <Compile Include="StadiumManagerRegisteration.aspx.designer.cs">
       <DependentUpon>StadiumManagerRegisteration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SystemAdmin.aspx.cs">
+      <DependentUpon>SystemAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SystemAdmin.aspx.designer.cs">
+      <DependentUpon>SystemAdmin.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <PropertyGroup>

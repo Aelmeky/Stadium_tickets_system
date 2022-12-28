@@ -8,6 +8,10 @@
     <link href="Helper/css/style.default.css" rel="stylesheet" />
     <link href="Helper/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <style type="text/css">
+           html,body{
+            height:100%;
+            margin:0;
+        }
         .preloader {
             position: absolute;
             margin: 0 auto;

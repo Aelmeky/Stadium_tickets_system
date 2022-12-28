@@ -786,3 +786,103 @@ CREATE PROCEDURE getStadium
 AS
 SELECT s.name,s.status,s.location,s.capacity FROM Stadium s INNER JOIN StadiumManager sm ON sm.s_id=s.id WHERE sm.username=@managerUserName
 GO
+
+
+GO
+CREATE PROCEDURE valid_login
+@username varchar(20),
+@password varchar(20),
+@type INT OUTPUT
+AS
+IF(EXISTS (
+	SELECT * 
+	FROM allAssocManagers assoc 
+	where assoc.username = @username and assoc.password = @password))
+	SET @type = 0;
+ELSE IF (EXISTS (
+	SELECT * 
+	FROM allClubRepresentatives rep 
+	where rep.username = @username and rep.password = @password))
+	SET @type = 1;
+ELSE IF (EXISTS (
+	SELECT * 
+	FROM allStadiumManagers mang 
+	where mang.username = @username and mang.password = @password))
+	SET @type = 2;
+ELSE IF (EXISTS (
+	SELECT * 
+	FROM allFans fan 
+	where fan.username = @username and fan.password = @password))
+	SET @type = 3;
+ELSE IF(EXISTS (
+	SELECT * 
+	FROM SystemAdmin system_admin 
+	where system_admin.username = @username and system_admin.password = @password))
+	SET @type = 4;
+ELSE
+	SET @type = 5; --invalid_login
+GO
+select * from SystemAdmin
+insert into SystemAdmin values('Yehia','ya7ia8','121131');
+
+
+GO
+CREATE PROCEDURE checkStadium
+@std_name varchar(20)
+, @found int OUTPUT
+AS
+IF(EXISTS (
+	SELECT * 
+	FROM allStadiums std 
+	where std.name = @std_name ))
+
+	SET @found = 1;
+ELSE 
+	SET @found = 0;
+GO
+
+GO
+CREATE PROCEDURE checkClub
+@club_name varchar(20)
+, @found int OUTPUT
+AS
+IF(EXISTS (
+	SELECT * 
+	FROM allClubs c 
+	where c.name = @club_name ))
+
+	SET @found = 1;
+ELSE 
+	SET @found = 0;
+GO
+
+
+GO
+CREATE PROCEDURE check_if_fan_exists
+@national_id varchar(20)
+, @found int OUTPUT
+AS
+IF(EXISTS (
+	SELECT * 
+	FROM Fan f 
+	where f.n_id = @national_id ))
+
+	SET @found = 1;
+ELSE 
+	SET @found = 0;
+GO
+
+GO
+CREATE PROCEDURE check_if_fan_blocked
+@national_id varchar(20)
+,@blocked int OUTPUT
+AS
+IF(EXISTS (
+	SELECT * 
+	FROM Fan f 
+	where f.n_id = @national_id and f.status = 0))
+
+	SET @blocked = 1;
+ELSE 
+	SET @blocked = 0;
+GO

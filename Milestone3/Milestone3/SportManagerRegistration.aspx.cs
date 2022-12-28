@@ -134,6 +134,7 @@ namespace Milestone3
                     addAssociationManager.ExecuteNonQuery();
                     conn.Close();
                     labelResult.Text = "";
+                    Response.Redirect("login.aspx"); 
                 }
                 catch (Exception ex)
                 {
