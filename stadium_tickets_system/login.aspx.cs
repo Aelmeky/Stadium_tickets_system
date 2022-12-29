@@ -47,7 +47,7 @@ namespace stadium_tickets_system
             else if (type == "1")
             {
                 Session["userName"] = login_username;
-                Response.Redirect("ClubRep.aspx");
+                Response.Redirect("RepresentativeClubInfo.aspx");
             }
             else if (type == "2")
             {

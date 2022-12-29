@@ -11,7 +11,7 @@ namespace stadium_tickets_system
 {
 
 
-    public partial class UpcomingMatches
+    public partial class Fan
     {
 
         /// <summary>
@@ -24,57 +24,39 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// LinkButton1 control.
+        /// availableMats control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        protected global::System.Web.UI.WebControls.Table availableMats;
 
         /// <summary>
-        /// LinkButton2 control.
+        /// ddlmats control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton2;
+        protected global::System.Web.UI.WebControls.DropDownList ddlmats;
 
         /// <summary>
-        /// LinkButton3 control.
+        /// purchase control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton3;
+        protected global::System.Web.UI.WebControls.Button purchase;
 
         /// <summary>
-        /// LinkButton4 control.
+        /// tickets control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton4;
-
-        /// <summary>
-        /// upcomingMatchesTableWithStadium control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithStadium;
-
-        /// <summary>
-        /// upcomingMatchesTableWithoutStadium control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithoutStadium;
+        protected global::System.Web.UI.WebControls.Table tickets;
     }
 }

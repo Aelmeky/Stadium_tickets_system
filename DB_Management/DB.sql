@@ -891,4 +891,74 @@ GO
  INNER JOIN Club c1 on m.c_id_1 = c1.id INNER JOIN Club c2 ON c2.id=m.c_id_2 
  GO
 
-select * from dbo.allRequests
+
+ CREATE PROC readRepresentativeClubInfo
+@rep_id int
+AS
+SELECT Club.id AS id, Club.name as name, Club.location as location FROM ClubRepresentative, Club WHERE ClubRepresentative.id = @rep_id AND ClubRepresentative.c_id = Club.id;
+
+
+
+CREATE PROC readUpcomingMatchesWithStadium
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime, Stadium.name AS StadiumName
+FROM ClubRepresentative, Club C1 , Club C2 ,Match, Stadium
+WHERE
+ClubRepresentative.id = @rep_id
+AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Stadium.id = Match.s_id
+AND Match.startTime>CURRENT_TIMESTAMP;
+
+CREATE PROC readUpcomingMatchesWithoutStadium
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime
+FROM ClubRepresentative, Club C1 , Club C2 ,Match
+WHERE
+ClubRepresentative.id = @rep_id
+AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Match.s_id IS NULL
+AND Match.startTime>CURRENT_TIMESTAMP;
+
+
+CREATE PROC readUpcomingMatchesToMakeHostReq
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime
+FROM ClubRepresentative, Club C1 , Club C2 ,Match
+WHERE
+ClubRepresentative.id = @rep_id
+AND ClubRepresentative.c_id = C1.id
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Match.s_id IS NULL
+AND Match.startTime>CURRENT_TIMESTAMP
+AND NOT EXISTS (SELECT * FROM HostRequest WHERE HostRequest.match_id = Match.id AND HostRequest.status = 'unhandled');
+
+
+
+CREATE PROC matchesWithAvailableTickets
+AS 
+(
+SELECT c1.name as Host, c2.name as Guest , s.name AS StadiumName, s.location as StadiumLocation, m.startTime
+FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) 
+WHERE exists (SELECT id FROM Ticket WHERE status = 1 AND m_id = m.id) AND m.startTime >= CURRENT_TIMESTAMP 
+)
+
+
+
+
+CREATE PROC readFanTickets
+@fan_id int
+AS
+SELECT DISTINCT Ticket.id AS TicketID, C1.name AS HostClub, C2.name AS GuestClub, Match.startTime
+FROM Ticket, Club C1, Club C2, Match, Stadium
+WHERE
+Ticket.f_id = @fan_id AND
+Ticket.m_id = Match.id AND
+Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id;
+
+
+select * from allFans

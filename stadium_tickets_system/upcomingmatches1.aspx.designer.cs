@@ -11,7 +11,7 @@ namespace stadium_tickets_system
 {
 
 
-    public partial class UpcomingMatches
+    public partial class upcomingmatches
     {
 
         /// <summary>
@@ -24,57 +24,57 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
-        /// LinkButton1 control.
+        /// addnewmatch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton1;
+        protected global::System.Web.UI.WebControls.LinkButton addnewmatch;
 
         /// <summary>
-        /// LinkButton2 control.
+        /// deleteamatch control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton2;
+        protected global::System.Web.UI.WebControls.LinkButton deleteamatch;
 
         /// <summary>
-        /// LinkButton3 control.
+        /// alreadypalyedmatches control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton3;
+        protected global::System.Web.UI.WebControls.LinkButton alreadypalyedmatches;
 
         /// <summary>
-        /// LinkButton4 control.
+        /// neverscheduled control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton LinkButton4;
+        protected global::System.Web.UI.WebControls.LinkButton neverscheduled;
 
         /// <summary>
-        /// upcomingMatchesTableWithStadium control.
+        /// Label1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithStadium;
+        protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
-        /// upcomingMatchesTableWithoutStadium control.
+        /// upcoming control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithoutStadium;
+        protected global::System.Web.UI.WebControls.Table upcoming;
     }
 }

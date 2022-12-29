@@ -70,10 +70,12 @@
   <ItemGroup>
     <Content Include="addanewmatch.aspx" />
     <Content Include="alreadyplayed.aspx" />
+    <Content Include="AvailableStadiums.aspx" />
     <Content Include="clubRepresentativeRegistration.aspx" />
     <Content Include="ControlClubs.aspx" />
     <Content Include="ControlStadiums.aspx" />
     <Content Include="deletematch.aspx" />
+    <Content Include="Fan.aspx" />
     <Content Include="Helper\css\custom.css" />
     <Content Include="Helper\css\orionicons.css" />
     <Content Include="Helper\css\style.blue.css" />
@@ -266,11 +268,14 @@
     <Content Include="nevermatched.aspx" />
     <Content Include="register.aspx" />
     <Content Include="Registration.aspx" />
+    <Content Include="RepresentativeClubInfo.aspx" />
+    <Content Include="RequestToHostMatch.aspx" />
     <Content Include="SportManagerRegistration.aspx" />
     <Content Include="StadiumManager.aspx" />
     <Content Include="StadiumManagerRegisteration.aspx" />
     <Content Include="SystemAdmin.aspx" />
-    <Content Include="upcomingmatches.aspx" />
+    <Content Include="UpcomingMatches.aspx" />
+    <Content Include="upcomingmatches1.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +292,13 @@
     </Compile>
     <Compile Include="alreadyplayed.aspx.designer.cs">
       <DependentUpon>alreadyplayed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AvailableStadiums.aspx.cs">
+      <DependentUpon>AvailableStadiums.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AvailableStadiums.aspx.designer.cs">
+      <DependentUpon>AvailableStadiums.aspx</DependentUpon>
     </Compile>
     <Compile Include="clubRepresentativeRegistration.aspx.cs">
       <DependentUpon>clubRepresentativeRegistration.aspx</DependentUpon>
@@ -315,6 +327,13 @@
     </Compile>
     <Compile Include="deletematch.aspx.designer.cs">
       <DependentUpon>deletematch.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Fan.aspx.cs">
+      <DependentUpon>Fan.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Fan.aspx.designer.cs">
+      <DependentUpon>Fan.aspx</DependentUpon>
     </Compile>
     <Compile Include="HostRequests.aspx.cs">
       <DependentUpon>HostRequests.aspx</DependentUpon>
@@ -351,6 +370,20 @@
     <Compile Include="Registration.aspx.designer.cs">
       <DependentUpon>Registration.aspx</DependentUpon>
     </Compile>
+    <Compile Include="RepresentativeClubInfo.aspx.cs">
+      <DependentUpon>RepresentativeClubInfo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RepresentativeClubInfo.aspx.designer.cs">
+      <DependentUpon>RepresentativeClubInfo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RequestToHostMatch.aspx.cs">
+      <DependentUpon>RequestToHostMatch.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RequestToHostMatch.aspx.designer.cs">
+      <DependentUpon>RequestToHostMatch.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SportManagerRegistration.aspx.cs">
       <DependentUpon>SportManagerRegistration.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -379,12 +412,19 @@
     <Compile Include="SystemAdmin.aspx.designer.cs">
       <DependentUpon>SystemAdmin.aspx</DependentUpon>
     </Compile>
-    <Compile Include="upcomingmatches.aspx.cs">
-      <DependentUpon>upcomingmatches.aspx</DependentUpon>
+    <Compile Include="UpcomingMatches.aspx.cs">
+      <DependentUpon>UpcomingMatches.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="upcomingmatches.aspx.designer.cs">
-      <DependentUpon>upcomingmatches.aspx</DependentUpon>
+    <Compile Include="UpcomingMatches.aspx.designer.cs">
+      <DependentUpon>UpcomingMatches.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="upcomingmatches1.aspx.cs">
+      <DependentUpon>upcomingmatches1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="upcomingmatches1.aspx.designer.cs">
+      <DependentUpon>upcomingmatches1.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

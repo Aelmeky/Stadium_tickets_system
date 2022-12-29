@@ -11,7 +11,7 @@ namespace stadium_tickets_system
 {
 
 
-    public partial class UpcomingMatches
+    public partial class RepresentativeClubInfo
     {
 
         /// <summary>
@@ -60,21 +60,12 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.WebControls.LinkButton LinkButton4;
 
         /// <summary>
-        /// upcomingMatchesTableWithStadium control.
+        /// infoTable control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithStadium;
-
-        /// <summary>
-        /// upcomingMatchesTableWithoutStadium control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithoutStadium;
+        protected global::System.Web.UI.WebControls.Table infoTable;
     }
 }

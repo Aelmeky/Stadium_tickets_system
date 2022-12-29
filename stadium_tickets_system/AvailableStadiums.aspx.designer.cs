@@ -11,7 +11,7 @@ namespace stadium_tickets_system
 {
 
 
-    public partial class UpcomingMatches
+    public partial class AvailableStadiums
     {
 
         /// <summary>
@@ -60,21 +60,39 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.WebControls.LinkButton LinkButton4;
 
         /// <summary>
-        /// upcomingMatchesTableWithStadium control.
+        /// Label1 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithStadium;
+        protected global::System.Web.UI.WebControls.Label Label1;
 
         /// <summary>
-        /// upcomingMatchesTableWithoutStadium control.
+        /// startTimeInput control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithoutStadium;
+        protected global::System.Web.UI.WebControls.TextBox startTimeInput;
+
+        /// <summary>
+        /// Submit control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button Submit;
+
+        /// <summary>
+        /// availableStadiumsTable control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Table availableStadiumsTable;
     }
 }

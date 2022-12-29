@@ -11,7 +11,7 @@ namespace stadium_tickets_system
 {
 
 
-    public partial class UpcomingMatches
+    public partial class RequestToHostMatch
     {
 
         /// <summary>
@@ -60,21 +60,48 @@ namespace stadium_tickets_system
         protected global::System.Web.UI.WebControls.LinkButton LinkButton4;
 
         /// <summary>
-        /// upcomingMatchesTableWithStadium control.
+        /// ddlmat control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithStadium;
+        protected global::System.Web.UI.WebControls.DropDownList ddlmat;
 
         /// <summary>
-        /// upcomingMatchesTableWithoutStadium control.
+        /// selmat control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table upcomingMatchesTableWithoutStadium;
+        protected global::System.Web.UI.WebControls.Button selmat;
+
+        /// <summary>
+        /// ddlstd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlstd;
+
+        /// <summary>
+        /// selstd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button selstd;
+
+        /// <summary>
+        /// msg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label msg;
     }
 }

@@ -10,55 +10,106 @@ using System.Web.UI.WebControls;
 
 namespace stadium_tickets_system
 {
-    public partial class upcomingmatches : System.Web.UI.Page
+    public partial class UpcomingMatches : System.Web.UI.Page
     {
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session == null || Session["userName"] == null)
                 Response.Redirect("login.aspx");
 
+            String userid = Session["userName"].ToString();
 
-            String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+            string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
             SqlConnection conn = new SqlConnection(connStr);
 
+            SqlCommand upcomingMatchesWithStadium = new SqlCommand("readUpcomingMatchesWithStadium", conn);
+            upcomingMatchesWithStadium.CommandType = System.Data.CommandType.StoredProcedure;
+            upcomingMatchesWithStadium.Parameters.Add(new SqlParameter("@rep_id", userid));
 
-            DataTable up = new DataTable();
             conn.Open();
-            new SqlDataAdapter("select * from upcomingMatches",conn).Fill(up);
-            foreach (DataRow row in up.Rows)
+            SqlDataReader rdr = upcomingMatchesWithStadium.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+            
+
+            while (rdr.Read())
             {
-                TableRow trow = new TableRow();
-                for (int i = 0; i < 4; i++)
-                {
-                    TableCell c = new TableCell();
-                    c.Controls.Add(new LiteralControl(row[i].ToString()));
-                    trow.Cells.Add(c);
-                }
-                upcoming.Controls.Add(trow);
+                TableRow match = new TableRow();
+
+                TableCell hostClub = new TableCell();
+                match.Cells.Add(hostClub);
+                hostClub.Text = rdr.GetString(rdr.GetOrdinal("Host"));
+
+                TableCell guestClub = new TableCell();
+                match.Cells.Add(guestClub);
+                guestClub.Text = rdr.GetString(rdr.GetOrdinal("Guest"));
+
+                TableCell startTime = new TableCell();
+                match.Cells.Add(startTime);
+                startTime.Text = rdr.GetDateTime(rdr.GetOrdinal("startTime")).ToString();
+
+                TableCell endTime = new TableCell();
+                match.Cells.Add(endTime);
+                endTime.Text = rdr.GetDateTime(rdr.GetOrdinal("endTime")).ToString();
+
+
+                TableCell StadiumName = new TableCell();
+                match.Cells.Add(StadiumName);
+                StadiumName.Text = rdr.GetString(rdr.GetOrdinal("StadiumName"));
+
+                upcomingMatchesTableWithStadium.Rows.Add(match);
+
             }
+            
             conn.Close();
+            conn.Open();
 
+            SqlCommand upcomingMatchesWithoutStadium = new SqlCommand("readUpcomingMatchesWithoutStadium", conn);
+            upcomingMatchesWithoutStadium.CommandType = System.Data.CommandType.StoredProcedure;
+            upcomingMatchesWithoutStadium.Parameters.Add(new SqlParameter("@rep_id", userid));
+
+            rdr = upcomingMatchesWithoutStadium.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+
+
+            while (rdr.Read())
+            {
+                TableRow match = new TableRow();
+
+                TableCell hostClub = new TableCell();
+                match.Cells.Add(hostClub);
+                hostClub.Text = rdr.GetString(rdr.GetOrdinal("Host"));
+
+                TableCell guestClub = new TableCell();
+                match.Cells.Add(guestClub);
+                guestClub.Text = rdr.GetString(rdr.GetOrdinal("Guest"));
+
+                TableCell startTime = new TableCell();
+                match.Cells.Add(startTime);
+                startTime.Text = rdr.GetDateTime(rdr.GetOrdinal("startTime")).ToString();
+
+                TableCell endTime = new TableCell();
+                match.Cells.Add(endTime);
+                endTime.Text = rdr.GetDateTime(rdr.GetOrdinal("endTime")).ToString();
+
+                upcomingMatchesTableWithoutStadium.Rows.Add(match);
+
+            }
+
+            conn.Close();
         }
-        protected void addanewmatch(object sender, EventArgs e)
+        protected void goClubInfo(object sender, EventArgs e)
         {
-            Response.Redirect("addanewmatch.aspx");
+            Response.Redirect("RepresentativeClubInfo.aspx");
         }
-        protected void deleteaMatch(object sender, EventArgs e)
+        protected void goUpcomingMatches(object sender, EventArgs e)
         {
-            Response.Redirect("deletematch.aspx");
+            Response.Redirect("UpcomingMatches.aspx");
         }
-
-
-
-        protected void alreadyplayedmatches(object sender, EventArgs e)
+        protected void goAvailableStadiums(object sender, EventArgs e)
         {
-            Response.Redirect("alreadyplayed.aspx");
+            Response.Redirect("AvailableStadiums.aspx");
         }
-
-        protected void nevermatched(object sender, EventArgs e)
+        protected void goHostReq(object sender, EventArgs e)
         {
-            Response.Redirect("nevermatched.aspx");
+            Response.Redirect("RequestToHostMatch.aspx");
         }
 
 
