@@ -27,11 +27,41 @@ namespace Milestone3
                 conn.Open();
                 acceptReq.ExecuteNonQuery();
                 conn.Close();
+
+                if (command == "acceptRequest")
+                {
+                    SqlCommand getStadium = new SqlCommand("getStadium", conn);
+                    getStadium.CommandType = System.Data.CommandType.StoredProcedure;
+                    getStadium.Parameters.Add(new SqlParameter("@managerUserName", Session["userName"]));
+                    conn.Open();
+                    SqlDataReader rdr = getStadium.ExecuteReader();
+                    
+                    rdr.Read();
+                    int cap =  rdr.GetInt32(rdr.GetOrdinal("Capacity"));
+
+                    conn.Close();
+                    for (int i = 0; i < cap; i++) {
+                        SqlCommand addTicket = new SqlCommand("addTicket", conn);
+                        addTicket.CommandType = System.Data.CommandType.StoredProcedure;
+                        addTicket.Parameters.Add(new SqlParameter("@host_club", hostName));
+                        addTicket.Parameters.Add(new SqlParameter("@guest_club", guestName));
+                        addTicket.Parameters.Add(new SqlParameter("@start", startTime));
+
+                        conn.Open();
+                        addTicket.ExecuteNonQuery();
+                        conn.Close();
+                    }
+                    
+
+                }
+
             }
             else
             {
                 message.Text = "You already handled this request";
             }
+
+
         }
 
 
@@ -134,6 +164,8 @@ namespace Milestone3
                 String status = requests.ElementAt(idx)[3].ToString();
                 handleRequest("rejectRequest", conn, host, guest, startTime, status);
             }
+
+            
             Response.Redirect("HostRequests.aspx");
         }
     }

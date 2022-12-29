@@ -16,21 +16,24 @@ namespace stadium_tickets_system
         {
             if (Session == null || Session["userName"] == null)
                 Response.Redirect("login.aspx");
+            if (!IsPostBack) {
+                String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+                SqlConnection conn = new SqlConnection(connStr);
 
-            String connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
-            SqlConnection conn = new SqlConnection(connStr);
+                //DropDownListhost.Items.Clear();
+                //DropDownListguest.Items.Clear();
+                DataTable up = new DataTable();
+                conn.Open();
+                new SqlDataAdapter("select * from allCLubs", conn).Fill(up);
+                foreach (DataRow row in up.Rows)
+                {
+                    DropDownListhost.Items.Add(new ListItem(row[0].ToString()));
+                    DropDownListguest.Items.Add(new ListItem(row[0].ToString()));
+                }
+                conn.Close();
 
-            //DropDownListhost.Items.Clear();
-            //DropDownListguest.Items.Clear();
-            DataTable up = new DataTable();
-            conn.Open();
-            new SqlDataAdapter("select * from allCLubs", conn).Fill(up);
-            foreach (DataRow row in up.Rows)
-            {
-                DropDownListhost.Items.Add(new ListItem(row[0].ToString()));
-                DropDownListguest.Items.Add(new ListItem(row[0].ToString()));
             }
-            conn.Close();
+
            
         }
 

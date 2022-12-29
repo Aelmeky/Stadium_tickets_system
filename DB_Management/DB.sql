@@ -1,7 +1,12 @@
 
 -- Requirements 2.1 for the Milestone :
 
-create database stadiumsystem;
+CREATE DATABASE stadiumsystem;
+USE stadiumsystem;
+
+
+
+
 -- 1) Creates All the tables in our database
 GO
 CREATE PROCEDURE createAllTables
@@ -86,7 +91,7 @@ m_id INT,
 CONSTRAINT FK_TICKET_1 FOREIGN KEY (f_id) REFERENCES Fan(n_id),
 CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Match(id) ON DELETE CASCADE ON UPDATE CASCADE)
 GO
-drop table stadium
+
 exec createAllTables;
 -- END (1)
 
@@ -267,14 +272,14 @@ SELECT name, capacity, location, status AS available
 FROM Stadium
 GO
 
-
-GO
-CREATE VIEW allRequests AS
-SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, hostReq.status AS status
-FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id 
-INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id 
-GO
-
+GO 
+ CREATE VIEW allRequests AS 
+ SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, c1.name AS host, c2.name AS guest, m.startTime AS startTim, 
+ m.endTime AS endTime,hostReq.status AS status, hostReq.id AS requestID 
+ FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id 
+ INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id INNER JOIN Match m ON hostReq.match_id=m.id 
+ INNER JOIN Club c1 on m.c_id_1 = c1.id INNER JOIN Club c2 ON c2.id=m.c_id_2 
+ GO
 
 -- end of part 2.2
 
@@ -554,7 +559,7 @@ CREATE PROCEDURE addFan
 @address VARCHAR(20),
 @phoneNumber INT
 AS
-INSERT INTO Fan VALUES(@nationalID,@phoneNumber,@name,@address,0,@birthDate,@userName,@password)
+INSERT INTO Fan VALUES(@nationalID,@phoneNumber,@name,@address,1,@birthDate,@userName,@password)
 GO
 -- END (xxi)
 
@@ -755,7 +760,7 @@ SELECT c1.name AS host, c2.name AS guest, m.startTime, m.endTime
 FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
 WHERE (m.startTime > CURRENT_TIMESTAMP ) AND c1.id <> c2.id
 GO
-drop view [upcomingMatches];
+
 GO
 CREATE VIEW [alreadyPalyedMatches]
 AS
@@ -818,8 +823,8 @@ GO
  ELSE 
          SET @type = 5; --invalid_login 
  GO 
- select * from SystemAdmin 
- insert into SystemAdmin values('Yehia','ya7ia8','121131'); 
+
+
   
   
  GO 
@@ -892,14 +897,14 @@ GO
  INNER JOIN Club c1 on m.c_id_1 = c1.id INNER JOIN Club c2 ON c2.id=m.c_id_2 
  GO
 
-
- CREATE PROC readRepresentativeClubInfo
+GO
+CREATE PROC readRepresentativeClubInfo
 @rep_id int
 AS
 SELECT Club.id AS id, Club.name as name, Club.location as location FROM ClubRepresentative, Club WHERE ClubRepresentative.id = @rep_id AND ClubRepresentative.c_id = Club.id;
+GO
 
-
-
+GO
 CREATE PROC readUpcomingMatchesWithStadium
 @rep_id int
 AS
@@ -911,7 +916,9 @@ AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
 AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
 AND Stadium.id = Match.s_id
 AND Match.startTime>CURRENT_TIMESTAMP;
+GO
 
+GO
 CREATE PROC readUpcomingMatchesWithoutStadium
 @rep_id int
 AS
@@ -923,8 +930,9 @@ AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
 AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
 AND Match.s_id IS NULL
 AND Match.startTime>CURRENT_TIMESTAMP;
+GO
 
-
+GO
 CREATE PROC readUpcomingMatchesToMakeHostReq
 @rep_id int
 AS
@@ -937,9 +945,10 @@ AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
 AND Match.s_id IS NULL
 AND Match.startTime>CURRENT_TIMESTAMP
 AND NOT EXISTS (SELECT * FROM HostRequest WHERE HostRequest.match_id = Match.id AND HostRequest.status = 'unhandled');
+GO
 
 
-
+GO
 CREATE PROC matchesWithAvailableTickets
 AS 
 (
@@ -947,10 +956,10 @@ SELECT c1.name as Host, c2.name as Guest , s.name AS StadiumName, s.location as 
 FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) 
 WHERE exists (SELECT id FROM Ticket WHERE status = 1 AND m_id = m.id) AND m.startTime >= CURRENT_TIMESTAMP 
 )
+GO
 
 
-
-
+GO
 CREATE PROC readFanTickets
 @fan_id int
 AS
@@ -960,30 +969,25 @@ WHERE
 Ticket.f_id = @fan_id AND
 Ticket.m_id = Match.id AND
 Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id;
+GO
 
 
-insert into Club Values ('ElAhly','Egypt');
 
-insert into ClubRepresentative values ('Ibrahim','isol','24434',1);
-
-select * from ClubRepresentative;
-
-
+GO
 CREATE PROC getClubRepid
 @username VARCHAR(20)
 AS
 SELECT id FROM ClubRepresentative WHERE ClubRepresentative.username = @username;
+GO
 
+GO
 CREATE PROC getFanid
 @username VARCHAR(20)
 AS
 SELECT n_id FROM Fan WHERE Fan.username = @username;
+GO
 
-INSERT INTO FAN VALUES('13234', 01023531135,
-'ibrahim',
-'lkasdn',
-1,
-'2002-09-18',
-'ikotb',
-'24434');
-SELECT * FROM Fan;
+
+
+
+

@@ -74,7 +74,7 @@ namespace stadium_tickets_system
                 String HostClubSel = matData[1].Substring(1, matData[1].Length - 1);
                 String StratTimeSel = matData[3].Substring(1, matData[3].Length - 1);
 
-                string connStr = WebConfigurationManager.ConnectionStrings["StadiumDatabaseConn"].ToString();
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
                 SqlConnection conn = new SqlConnection(connStr);
 
                 SqlCommand viewStad = new SqlCommand("SELECT * FROM dbo.viewAvailableStadiumsOn('" + StratTimeSel + "');", conn);
@@ -125,7 +125,7 @@ namespace stadium_tickets_system
                 String stdname = stdData[1].Substring(1, stdData[1].Length - 1);
 
 
-                string connStr = WebConfigurationManager.ConnectionStrings["StadiumDatabaseConn"].ToString();
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
                 SqlConnection conn = new SqlConnection(connStr);
 
                 SqlCommand addHostRequest = new SqlCommand("addHostRequest", conn);

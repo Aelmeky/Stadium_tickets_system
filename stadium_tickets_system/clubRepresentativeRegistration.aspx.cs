@@ -38,6 +38,21 @@ namespace stadium_tickets_system
             conn.Close();
             return allUsernames;
         }
+
+
+        public ArrayList getAllClubRepresentativesClubs(SqlConnection conn)
+        {
+            SqlCommand allClubRepresentatives = new SqlCommand("SELECT * FROM dbo.allClubRepresentatives", conn);
+            ArrayList allUsernames = new ArrayList();
+            conn.Open();
+            SqlDataReader rdrRepresentatives = allClubRepresentatives.ExecuteReader();
+            while (rdrRepresentatives.Read())
+            {
+                allUsernames.Add(rdrRepresentatives.GetString(rdrRepresentatives.GetOrdinal("club_name")));
+            }
+            conn.Close();
+            return allUsernames;
+        }
         public ArrayList getAllStadiumManagers(SqlConnection conn)
         {
             SqlCommand allStadiumManagers = new SqlCommand("SELECT * FROM dbo.allStadiumManagers", conn);
@@ -121,8 +136,15 @@ namespace stadium_tickets_system
                 if (clubs[i].ToString() == clubName)
                 {
                     found = true;
+                    ArrayList repsclubs = getAllClubRepresentativesClubs(conn);
+                    for(int j =0;j< repsclubs.Count; j++)
+                    {
+                        if (repsclubs[j].ToString() == clubName) found = false;
+                    }
+
                 }
             }
+
             ArrayList allFans = getAllFans(conn);
             for (int i = 0; i < allFans.Count; i++)
             {
@@ -179,7 +201,7 @@ namespace stadium_tickets_system
             }
             else
             {
-                labelResult.Text = "This Club Does not exist !";
+                labelResult.Text = "This Club Does not exist or already has a representative!";
             }
         }
     }

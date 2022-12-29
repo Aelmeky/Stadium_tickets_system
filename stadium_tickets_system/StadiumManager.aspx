@@ -98,6 +98,10 @@
                 }
 
         /* Add a color to the active/current link */
+        .auto-style1 {
+            width: 4000px;
+            height: 2250px;
+        }
     </style>
 </head>
 <body class="backgnd">
@@ -113,7 +117,7 @@
         <div>
             <center>
                 <div>
-                    <asp:Image ID="Image1" runat="server" ImageUrl="Helper/img-07.jpg" Width="50%" Height="50%" />
+                    <asp:Image ID="Image1" runat="server" ImageUrl="./img-07.jpg" Width="50%" Height="50%" />
                     <div>
                         <div>
                             <div style="position: relative">

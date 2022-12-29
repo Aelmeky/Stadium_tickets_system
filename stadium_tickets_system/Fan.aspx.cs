@@ -122,7 +122,7 @@ namespace stadium_tickets_system
                 String GuestClubSel = matData[2].Substring(1, matData[2].Length - 1);
                 String StratTimeSel = matData[3].Substring(1, matData[3].Length - 1);
 
-                string connStr = WebConfigurationManager.ConnectionStrings["StadiumDatabaseConn"].ToString();
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
                 SqlConnection conn = new SqlConnection(connStr);
 
                 SqlCommand purchaseTicket = new SqlCommand("purchaseTicket", conn);

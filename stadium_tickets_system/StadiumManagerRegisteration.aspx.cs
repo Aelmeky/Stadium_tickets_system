@@ -51,6 +51,21 @@ namespace stadium_tickets_system
             conn.Close();
             return allUsernames;
         }
+
+        public ArrayList getAllStadiumManagersStadiums(SqlConnection conn)
+        {
+            SqlCommand allStadiumManagers = new SqlCommand("SELECT * FROM dbo.allStadiumManagers", conn);
+            ArrayList allstdnames = new ArrayList();
+            conn.Open();
+            SqlDataReader rdrStadiumManagers = allStadiumManagers.ExecuteReader();
+            while (rdrStadiumManagers.Read())
+            {
+                allstdnames.Add(rdrStadiumManagers.GetString(rdrStadiumManagers.GetOrdinal("stadium_name")));
+            }
+            conn.Close();
+            return allstdnames;
+        }
+
         public ArrayList getAllFans(SqlConnection conn)
         {
             SqlCommand allFans = new SqlCommand("SELECT * FROM dbo.allFans", conn);
@@ -122,6 +137,11 @@ namespace stadium_tickets_system
                 if (stadiums[i].ToString() == stadiumName)
                 {
                     found = true;
+                    ArrayList mansstds = getAllStadiumManagersStadiums(conn);
+                    for (int j = 0; j < mansstds.Count; j++)
+                    {
+                        if (mansstds[j].ToString() == stadiumName) found = false;
+                    }
                 }
             }
             bool uniqueUser = true;
@@ -182,7 +202,7 @@ namespace stadium_tickets_system
             }
             else
             {
-                labelResult.Text = "This Stadium Does not exist !";
+                labelResult.Text = "This Stadium Does not exist or Already has a manager!";
             }
         }
     }
