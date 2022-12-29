@@ -1,7 +1,7 @@
 
 -- Requirements 2.1 for the Milestone :
 
-create database test
+create database stadiumsystem;
 -- 1) Creates All the tables in our database
 GO
 CREATE PROCEDURE createAllTables
@@ -106,6 +106,7 @@ DROP TABLE Match
 DROP TABLE Club
 DROP TABLE Stadium
 GO
+
 
 -- END (2)
 
@@ -961,4 +962,28 @@ Ticket.m_id = Match.id AND
 Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id;
 
 
-select * from allFans
+insert into Club Values ('ElAhly','Egypt');
+
+insert into ClubRepresentative values ('Ibrahim','isol','24434',1);
+
+select * from ClubRepresentative;
+
+
+CREATE PROC getClubRepid
+@username VARCHAR(20)
+AS
+SELECT id FROM ClubRepresentative WHERE ClubRepresentative.username = @username;
+
+CREATE PROC getFanid
+@username VARCHAR(20)
+AS
+SELECT n_id FROM Fan WHERE Fan.username = @username;
+
+INSERT INTO FAN VALUES('13234', 01023531135,
+'ibrahim',
+'lkasdn',
+1,
+'2002-09-18',
+'ikotb',
+'24434');
+SELECT * FROM Fan;

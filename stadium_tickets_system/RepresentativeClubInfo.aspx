@@ -6,13 +6,21 @@
 <head runat="server">
     <title></title>
     <style>
+                   html,body{
+            height:100%;
+            margin:0;
+        }
+        * {
+            padding: 0;
+            margin: 0;
+        }
                .backgnd {
             
             height: 100%;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
-            background-image: url(background.jpg);
+            background-image: url(Helper/background.jpg);
         }
        .topnav {
             background-color: #333;

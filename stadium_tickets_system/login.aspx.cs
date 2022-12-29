@@ -46,7 +46,22 @@ namespace stadium_tickets_system
             }
             else if (type == "1")
             {
-                Session["userName"] = login_username;
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+                SqlConnection conn = new SqlConnection(connStr);
+
+                SqlCommand getClubRepid = new SqlCommand("getClubRepid", conn);
+                getClubRepid.CommandType = System.Data.CommandType.StoredProcedure;
+                getClubRepid.Parameters.Add(new SqlParameter("@username", login_username));
+
+                conn.Open();
+                SqlDataReader rdr = getClubRepid.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                while (rdr.Read())
+                {
+
+                    Session["userName"] = rdr.GetInt32(rdr.GetOrdinal("id")).ToString();
+
+                }
+                conn.Close();
                 Response.Redirect("RepresentativeClubInfo.aspx");
             }
             else if (type == "2")
@@ -56,7 +71,23 @@ namespace stadium_tickets_system
             }
             else if (type == "3")
             {
-                Session["userName"] = login_username;
+                string connStr = WebConfigurationManager.ConnectionStrings["MyDB"].ToString();
+                SqlConnection conn = new SqlConnection(connStr);
+
+                SqlCommand getFanid = new SqlCommand("getFanid", conn);
+                getFanid.CommandType = System.Data.CommandType.StoredProcedure;
+                getFanid.Parameters.Add(new SqlParameter("@username", login_username));
+
+                conn.Open();
+                SqlDataReader rdr = getFanid.ExecuteReader(System.Data.CommandBehavior.CloseConnection);
+                while (rdr.Read())
+                {
+
+                    Session["userName"] = rdr.GetString(rdr.GetOrdinal("n_id")).ToString();
+
+                }
+                conn.Close();
+
                 Response.Redirect("Fan.aspx");
             }
             else if (type == "4")
