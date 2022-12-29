@@ -1,8 +1,7 @@
 
 -- Requirements 2.1 for the Milestone :
 
-
-
+create database stadiumsystem;
 -- 1) Creates All the tables in our database
 GO
 CREATE PROCEDURE createAllTables
@@ -87,8 +86,8 @@ m_id INT,
 CONSTRAINT FK_TICKET_1 FOREIGN KEY (f_id) REFERENCES Fan(n_id),
 CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Match(id) ON DELETE CASCADE ON UPDATE CASCADE)
 GO
-
-
+drop table stadium
+exec createAllTables;
 -- END (1)
 
 
@@ -107,6 +106,7 @@ DROP TABLE Match
 DROP TABLE Club
 DROP TABLE Stadium
 GO
+
 
 -- END (2)
 
@@ -643,7 +643,7 @@ GO
 GO
 CREATE VIEW clubsNeverMatched 
 AS 
-SELECT c1.name AS , c2.name	AS guest
+SELECT c1.name AS host, c2.name	AS guest
 FROM Club c1, Club c2
 WHERE c1.id < c2.id
 except (SELECT c1.name , c2.name 
@@ -740,7 +740,7 @@ DELETE FROM Match
 WHERE 
 Match.c_id_1 = (SELECT id FROM Club WHERE Club.name = @host) 
 AND
-Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest);
+Match.c_id_2 = (SELECT id FROM Club WHERE Club.name = @guest)
 AND 
 Match.startTime = @start_time
 AND
@@ -753,9 +753,9 @@ CREATE VIEW [upcomingMatches]
 AS
 SELECT c1.name AS host, c2.name AS guest, m.startTime, m.endTime
 FROM Match m INNER JOIN Club c1 ON m.c_id_1=c1.id INNER JOIN Club c2 ON m.c_id_2=c2.id
-WHERE (m.startTime > CURRENT_TIMESTAMP ) AND c1.id < c2.id
+WHERE (m.startTime > CURRENT_TIMESTAMP ) AND c1.id <> c2.id
 GO
-
+drop view [upcomingMatches];
 GO
 CREATE VIEW [alreadyPalyedMatches]
 AS
@@ -775,3 +775,215 @@ except (SELECT c1.name , c2.name
 					WHERE m.c_id_1 IN (c1.id,c2.id) AND m.c_id_2 IN (c1.id,c2.id))
 
 GO
+
+GO 
+ CREATE PROCEDURE getStadium 
+ @managerUserName VARCHAR(20) 
+ AS 
+ SELECT s.name,s.status,s.location,s.capacity FROM Stadium s INNER JOIN StadiumManager sm ON sm.s_id=s.id WHERE sm.username=@managerUserName 
+ GO 
+  
+  
+ GO 
+ CREATE PROCEDURE valid_login 
+ @username varchar(20), 
+ @password varchar(20), 
+ @type INT OUTPUT 
+ AS 
+ IF(EXISTS ( 
+         SELECT *  
+         FROM allAssocManagers assoc  
+         where assoc.username = @username and assoc.password = @password)) 
+         SET @type = 0; 
+ ELSE IF (EXISTS ( 
+         SELECT *  
+         FROM allClubRepresentatives rep  
+         where rep.username = @username and rep.password = @password)) 
+         SET @type = 1; 
+ ELSE IF (EXISTS ( 
+         SELECT *  
+         FROM allStadiumManagers mang  
+         where mang.username = @username and mang.password = @password)) 
+         SET @type = 2; 
+ ELSE IF (EXISTS ( 
+         SELECT *  
+         FROM allFans fan  
+         where fan.username = @username and fan.password = @password)) 
+         SET @type = 3; 
+ ELSE IF(EXISTS ( 
+         SELECT *  
+         FROM SystemAdmin system_admin  
+         where system_admin.username = @username and system_admin.password = @password)) 
+         SET @type = 4; 
+ ELSE 
+         SET @type = 5; --invalid_login 
+ GO 
+ select * from SystemAdmin 
+ insert into SystemAdmin values('Yehia','ya7ia8','121131'); 
+  
+  
+ GO 
+ CREATE PROCEDURE checkStadium 
+ @std_name varchar(20) 
+ , @found int OUTPUT 
+ AS 
+ IF(EXISTS ( 
+         SELECT *  
+         FROM allStadiums std  
+         where std.name = @std_name )) 
+  
+         SET @found = 1; 
+ ELSE  
+         SET @found = 0; 
+ GO 
+  
+ GO 
+ CREATE PROCEDURE checkClub 
+ @club_name varchar(20) 
+ , @found int OUTPUT 
+ AS 
+ IF(EXISTS ( 
+         SELECT *  
+         FROM allClubs c  
+         where c.name = @club_name )) 
+  
+         SET @found = 1; 
+ ELSE  
+         SET @found = 0; 
+ GO 
+  
+  
+ GO 
+ CREATE PROCEDURE check_if_fan_exists 
+ @national_id varchar(20) 
+ , @found int OUTPUT 
+ AS 
+ IF(EXISTS ( 
+         SELECT *  
+         FROM Fan f  
+         where f.n_id = @national_id )) 
+  
+         SET @found = 1; 
+ ELSE  
+         SET @found = 0; 
+ GO 
+  
+ GO 
+ CREATE PROCEDURE check_if_fan_blocked 
+ @national_id varchar(20) 
+ ,@blocked int OUTPUT 
+ AS 
+ IF(EXISTS ( 
+         SELECT *  
+         FROM Fan f  
+         where f.n_id = @national_id and f.status = 0)) 
+  
+         SET @blocked = 1; 
+ ELSE  
+         SET @blocked = 0; 
+ GO
+
+ GO 
+ CREATE VIEW allRequests AS 
+ SELECT clubRep.username AS club_representative_username, stadMan.username AS stadium_manager_username, c1.name AS host, c2.name AS guest, m.startTime AS startTim, 
+ m.endTime AS endTime,hostReq.status AS status, hostReq.id AS requestID 
+ FROM HostRequest hostReq INNER JOIN ClubRepresentative clubRep on hostReq.rep_id = clubRep.id 
+ INNER JOIN StadiumManager stadMan on hostReq.man_id = stadMan.id INNER JOIN Match m ON hostReq.match_id=m.id 
+ INNER JOIN Club c1 on m.c_id_1 = c1.id INNER JOIN Club c2 ON c2.id=m.c_id_2 
+ GO
+
+
+ CREATE PROC readRepresentativeClubInfo
+@rep_id int
+AS
+SELECT Club.id AS id, Club.name as name, Club.location as location FROM ClubRepresentative, Club WHERE ClubRepresentative.id = @rep_id AND ClubRepresentative.c_id = Club.id;
+
+
+
+CREATE PROC readUpcomingMatchesWithStadium
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime, Stadium.name AS StadiumName
+FROM ClubRepresentative, Club C1 , Club C2 ,Match, Stadium
+WHERE
+ClubRepresentative.id = @rep_id
+AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Stadium.id = Match.s_id
+AND Match.startTime>CURRENT_TIMESTAMP;
+
+CREATE PROC readUpcomingMatchesWithoutStadium
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime
+FROM ClubRepresentative, Club C1 , Club C2 ,Match
+WHERE
+ClubRepresentative.id = @rep_id
+AND  (ClubRepresentative.c_id = C1.id OR ClubRepresentative.c_id = C2.id)
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Match.s_id IS NULL
+AND Match.startTime>CURRENT_TIMESTAMP;
+
+
+CREATE PROC readUpcomingMatchesToMakeHostReq
+@rep_id int
+AS
+SELECT C1.name AS Host, C2.name AS Guest, Match.startTime, Match.endTime
+FROM ClubRepresentative, Club C1 , Club C2 ,Match
+WHERE
+ClubRepresentative.id = @rep_id
+AND ClubRepresentative.c_id = C1.id
+AND (Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id)
+AND Match.s_id IS NULL
+AND Match.startTime>CURRENT_TIMESTAMP
+AND NOT EXISTS (SELECT * FROM HostRequest WHERE HostRequest.match_id = Match.id AND HostRequest.status = 'unhandled');
+
+
+
+CREATE PROC matchesWithAvailableTickets
+AS 
+(
+SELECT c1.name as Host, c2.name as Guest , s.name AS StadiumName, s.location as StadiumLocation, m.startTime
+FROM Club c1 INNER JOIN Match m ON (m.c_id_1 = c1.id) INNER JOIN Club c2 ON (m.c_id_2 = c2.id) INNER JOIN Stadium s ON (s.id = m.s_id) 
+WHERE exists (SELECT id FROM Ticket WHERE status = 1 AND m_id = m.id) AND m.startTime >= CURRENT_TIMESTAMP 
+)
+
+
+
+
+CREATE PROC readFanTickets
+@fan_id int
+AS
+SELECT DISTINCT Ticket.id AS TicketID, C1.name AS HostClub, C2.name AS GuestClub, Match.startTime
+FROM Ticket, Club C1, Club C2, Match, Stadium
+WHERE
+Ticket.f_id = @fan_id AND
+Ticket.m_id = Match.id AND
+Match.c_id_1 = C1.id AND Match.c_id_2 = C2.id;
+
+
+insert into Club Values ('ElAhly','Egypt');
+
+insert into ClubRepresentative values ('Ibrahim','isol','24434',1);
+
+select * from ClubRepresentative;
+
+
+CREATE PROC getClubRepid
+@username VARCHAR(20)
+AS
+SELECT id FROM ClubRepresentative WHERE ClubRepresentative.username = @username;
+
+CREATE PROC getFanid
+@username VARCHAR(20)
+AS
+SELECT n_id FROM Fan WHERE Fan.username = @username;
+
+INSERT INTO FAN VALUES('13234', 01023531135,
+'ibrahim',
+'lkasdn',
+1,
+'2002-09-18',
+'ikotb',
+'24434');
+SELECT * FROM Fan;
