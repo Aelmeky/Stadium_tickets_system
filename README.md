@@ -1,6 +1,6 @@
 # Stadium-Tickets-System
 ## CSEN 501 ( Databases) Project :
- The Project aims to manage everything related to the football cycle starting from a fan who wants to attend matches by purchasing some tickets then moving to the club representative who can ask for host request for his club, the host requests are handled by the stadium manager who can accept or reject the request coming from a certain club representative. Furthermore, the system also contains a Sport Association Manager who can add new matches to the schedule And of course the System Admin who can block fans, add or delete stadiums and clubs.  
+ The Project aims to manage everything related to the football cycle starting from a fan who wants to attend matches by purchasing some tickets then moving to the club representative who can ask for host request for his / her club, host requests are handled by the stadium manager who can accept or reject the request coming from a certain club representative. Furthermore, the system also contains a Sport Association Manager who can add new matches to the schedule and of course the System Admin who can block fans, add or delete stadiums and clubs.  
  
 ### Procedures we followed to build the website:
 ```
