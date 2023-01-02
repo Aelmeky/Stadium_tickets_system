@@ -1,8 +1,8 @@
 
 -- Requirements 2.1 for the Milestone :
 
-CREATE DATABASE stadiumsystem;
-USE stadiumsystem;
+
+
 
 
 
@@ -90,6 +90,7 @@ f_id VARCHAR(20),
 m_id INT,
 CONSTRAINT FK_TICKET_1 FOREIGN KEY (f_id) REFERENCES Fan(n_id),
 CONSTRAINT FK_TICKET_2 FOREIGN KEY (m_id) REFERENCES Match(id) ON DELETE CASCADE ON UPDATE CASCADE)
+INSERT INTO SystemAdmin VALUES ('admin','admin','admin');
 GO
 
 exec createAllTables;
@@ -986,8 +987,3 @@ CREATE PROC getFanid
 AS
 SELECT n_id FROM Fan WHERE Fan.username = @username;
 GO
-
-
-
-
-
