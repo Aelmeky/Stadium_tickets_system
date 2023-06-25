@@ -11,49 +11,4 @@
 5) Frontend was build using HTML,CSS and JavaScript.
 ```
   
-## Some Screen Shots :  
-  
-  
-### Registration :
-
-Log In                     |  Registration              
-:-------------------------:|:-------------------------:
-![Login](https://user-images.githubusercontent.com/102627389/210093621-fa1757e8-f572-42d6-b764-c34416d4dcce.png) | ![register](https://user-images.githubusercontent.com/102627389/210093641-c4bebe32-01d3-4cea-bff7-74d24b15dd2e.png)
-
-
-### Stadium Manager Page :
-
-Stadium Info               |  View Host Requests              
-:-------------------------:|:-------------------------:
-![stadium Info](https://user-images.githubusercontent.com/102627389/210093892-265159f6-18c8-41d0-aa99-2b761732f1b0.png) | ![hostRequest](https://user-images.githubusercontent.com/102627389/210093879-6e71ef03-f65a-47a5-bd57-cd17f83c3f28.png)
-
-
-
-### Club Representative Page :
-
-View Stadiums to host the match |  View your upcoming matches              
-:-------------------------:|:-------------------------:
-![availableStadiums](https://user-images.githubusercontent.com/102627389/210094536-4a6c122c-3241-4c4a-87e5-58095cd5bfe8.png) | ![upcoming_match](https://user-images.githubusercontent.com/102627389/210094563-1db13a9d-9e78-4138-b9f6-1330067ddf45.png)
-
-
-### Fan and System Admin Pages :
-
-Fan Purchasing Tickets     | System Admin managing Stadiums
-:-------------------------:|:-------------------------:
-![fan](https://user-images.githubusercontent.com/102627389/210095011-e54998ee-3505-440e-ad0f-791d48e0885a.png) | ![sysAdmin2](https://user-images.githubusercontent.com/102627389/210094991-217b0121-d570-4f43-b41a-ed22530e4a40.png)
-
-
-
-### Sport Association Manager Page :
-
-Adding a new Match         | Checking clubs never matched
-:-------------------------:|:-------------------------:
-![addMatch](https://user-images.githubusercontent.com/102627389/210095386-d9e42c08-b614-4d6c-90fd-4faf30b19190.png) | ![neverPlayed](https://user-images.githubusercontent.com/102627389/210095375-05e34b6e-1b67-4a36-8582-c44ff32f4bf7.png)
-
-
-## Our Team :
-* [Yehia Mohammad](https://github.com/YehiaFarghaly)  
-* [Abdelrahman Elmeky](https://github.com/Aelmeky)  
-* [Ibrahim Soltan](https://github.com/Ibrahim-Soltan)  
-* [Omar Mohammad](https://github.com/OmarMUhammed03)  
 
